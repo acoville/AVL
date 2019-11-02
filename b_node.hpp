@@ -40,8 +40,8 @@ namespace AVL
         // (shallow) copy semantics
 
         b_node(const b_node &other) : 
-            data_ {other.data_},
             comp_ {other.comp_},
+            data_ {other.data_},
             leftChild_ {other.leftChild_},
             rightChild_ {other.rightChild_},
             parent_ {other.parent_},
@@ -214,10 +214,15 @@ namespace AVL
 
         //-------------------------------------
 
-        void SetParent(b_node &other)
+        b_node & Parent()
         {
-            parent_ = std::make_shared<b_node>(other);
+            return *parent_; 
         }
+
+//        void SetParent(b_node &other)
+//        {
+//            parent_ = std::make_shared<b_node>(other);
+//        }
 
         //============================================================
 

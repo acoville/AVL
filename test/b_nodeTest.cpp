@@ -134,7 +134,6 @@ namespace AVL::test
 
     //===================================================================
 
-/*
 
     TEST_CASE("Set Child to a smart pointer Test", "[B node]")
     {
@@ -142,13 +141,17 @@ namespace AVL::test
 
         root.SetLeftChild(15);
 
-
         auto left = root.LeftChild();
 
+        REQUIRE(left.HasParent());
+        auto leftParent = left.Parent();
+        REQUIRE(leftParent == root);
+        
 
-                
+        REQUIRE(root.HasLeftChild());
+        auto rootChild = root.LeftChild();
+        REQUIRE(rootChild == root.LeftChild());
     }
-*/
 
     //===================================================================
 
