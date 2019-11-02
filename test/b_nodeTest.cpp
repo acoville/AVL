@@ -138,4 +138,173 @@ namespace AVL::test
 
         REQUIRE(!root.HasRightChild());
     }
+
+        //=========================================================================
+
+    /*------------------------------
+
+        BEFORE          AFTER
+
+         10             10
+        /   
+      [7]
+
+    ------------------------------*/
+
+    TEST_CASE("Left Child Deletion Test, case 1: leaf", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(10, comp);
+        
+        REQUIRE(!root.HasLeftChild());
+
+        root.SetLeftChild(7);
+
+        REQUIRE(root.HasLeftChild());
+
+        root.DeleteLeftChild();
+
+        REQUIRE(!root.HasLeftChild());
+    }
+
+    //=========================================================================
+
+    /*-------------------------------
+
+          BEFORE           AFTER
+
+            10              10
+              \             
+              [15]         
+          
+    --------------------------------*/
+
+    TEST_CASE("Right Child Deletion Test, case 1: leaf", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(10, comp);
+        
+        REQUIRE(!root.HasRightChild());
+        root.SetRightChild(15);
+        REQUIRE(root.HasRightChild());
+
+        root.DeleteRightChild();
+        REQUIRE(!root.HasRightChild());
+    }
+
+    //=====================================================================
+
+    /*----------------------------------
+
+        BEFORE:         AFTER: 
+
+           50             50
+          /              /
+       [40]             30
+        /
+      30
+
+    ----------------------------------*/
+
+    TEST_CASE("Delete Left Child case 2: 1 grandchild", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(50, comp);
+        root.SetLeftChild(40);
+        root.LeftChild().SetLeftChild(30);
+
+        REQUIRE(root.LeftChild().HasLeftChild());
+
+        root.DeleteLeftChild();
+
+        REQUIRE(root.HasLeftChild());
+        REQUIRE(root.LeftChild().Data() == 30);
+    }
+
+    //=====================================================================
+
+    /*----------------------------------
+
+        BEFORE:         AFTER: 
+
+           50             50
+             \              \
+             [70]            80
+                \
+                 80
+
+    ----------------------------------*/
+
+    TEST_CASE("Delete Right Child case 2: 1 grandchild", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(50, comp);
+        root.SetRightChild(70);
+        root.RightChild().SetRightChild(80);
+
+        REQUIRE(root.RightChild().HasRightChild());
+
+        root.DeleteRightChild();
+
+        REQUIRE(root.HasRightChild());
+        REQUIRE(root.RightChild().Data() == 80);
+    }
+
+    //==========================================================================
+
+    /*-------------------------------
+
+        BEFORE:            AFTER:
+
+            40               40
+           /                /
+         [35]              37
+         /  \             /
+        30   37          30   
+
+    -------------------------------*/
+
+    TEST_CASE("Delete Left Child case 3: 2 granchildren nodes", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(40, comp);
+        root.SetLeftChild(35);
+        root.LeftChild().SetLeftChild(30);
+        root.LeftChild().SetRightChild(37);
+
+        //---------------------------------------
+
+        root.DeleteLeftChild();
+
+        REQUIRE(root.HasLeftChild());
+        REQUIRE(root.LeftChild().Data() == 37);
+        
+        REQUIRE(root.LeftChild().HasLeftChild());
+        REQUIRE(root.LeftChild().LeftChild().Data() == 30);
+    }
+
+    //============================================================================
+
+    /*------------------------------------
+
+        BEFORE:         AFTER:
+
+          40              40
+            \               \
+           [50]             45
+           /  \               \
+         45    55             55
+
+    -------------------------------------*/
+
+    TEST_CASE("Delete Right Child case 3: 2 grandchildren nodes", "[B node]")
+    {
+        auto root = b_node<int, std::less<int>>(40, comp);
+        root.SetRightChild(50);
+        root.RightChild().SetLeftChild(45);
+        root.RightChild().SetRightChild(55);
+
+        //---------------------------------------------------
+
+        root.DeleteRightChild();
+
+        REQUIRE(root.RightChild().HasRightChild());
+        REQUIRE(root.RightChild().RightChild().Data() == 55);
+    }
+
 }

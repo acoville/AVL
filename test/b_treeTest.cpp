@@ -83,4 +83,6 @@ namespace AVL::test
 
         REQUIRE(leftMostLeaf.Data() == 120);
     }
+
+    
 }

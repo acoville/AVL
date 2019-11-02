@@ -23,6 +23,7 @@ namespace AVL
         std::shared_ptr<b_node> parent_ {nullptr};
 
         int height_ {0};
+        bool leaf_ {true};
 
         public: 
 
@@ -177,6 +178,9 @@ namespace AVL
             leftChild_ = std::make_shared<b_node>(obj, comp_);
             leftChild_->SetHeight(height_ + 1);
             leftChild_->parent_ = std::make_shared<b_node>(*this);
+
+            if(leaf_)
+                leaf_ = false;
         }
 
         //---------------------------------------------
@@ -187,7 +191,17 @@ namespace AVL
         {
             leftChild_ = other;
             leftChild_->SetHeight(height_ + 1);
-            leftChild_->parent_ = &this;
+            leftChild_->parent_ = std::make_shared<b_node>(*this);
+
+            if(leaf_)
+                leaf_ = false;            
+        }
+
+        //============================================================
+
+        bool IsLeaf() const
+        {
+            return leaf_;
         }
 
         //============================================================
@@ -222,6 +236,9 @@ namespace AVL
             rightChild_ = std::make_shared<b_node>(obj, comp_);
             rightChild_->SetHeight(height_ + 1);
             rightChild_->parent_ = std::make_shared<b_node>(*this);
+
+            if(leaf_)
+                leaf_ = false;
         }
 
         //-------------------------------------------------
@@ -230,7 +247,10 @@ namespace AVL
         {
             rightChild_ = other;
             rightChild_->SetHeight(height_ + 1);
-            rightChild_->parent_ = &this;
+            rightChild_->parent_ = std::make_shared<b_node>(*this);
+
+            if(leaf_)
+                leaf_ = false;
         }
 
         //============================================================
@@ -272,5 +292,209 @@ namespace AVL
             if(rightChild_)
                 rightChild_->SetHeight(newHeight);
         }
+
+        //==============================================================
+
+        /*-----------------------------
+
+            Delete Left Child
+
+        ------------------------------*/
+
+        void DeleteLeftChild()
+        {
+            /*-----------------------------------------
+
+                    BEFORE:             AFTER:
+
+                        40              40
+                       /  \               \
+                    [35]   55              55
+
+            --------------------------------------------*/
+
+            if(leftChild_->IsLeaf())
+            {
+                leftChild_.reset();
+                return;
+            }
+
+            int children {0};
+
+            if(leftChild_->HasLeftChild())
+                children++;
+
+            if(leftChild_->HasRightChild())
+                children++;
+
+            switch(children)
+            {
+                /*------------------------------------------------
+            
+                case 2: left child has 1 child
+
+                    BEFORE:         AFTER:
+
+                        40              40
+                       /  \            /  \
+                    [35]   55        30    75
+                    /       
+                  30        
+
+                ------------------------------------------------*/
+
+                case(1):
+                {
+                    if(leftChild_->HasLeftChild())
+                    {
+                        SetLeftChild(leftChild_->leftChild_);
+                    }
+                    else
+                    {
+                        SetLeftChild(leftChild_->rightChild_);
+                    }
+
+                    break;
+                }
+
+                /*------------------------------------------------
+                    
+                    case 3: child has 2 children
+
+                            BEFORE:         AFTER:
+
+                              40              40
+                             /  \            /  \
+                          [35]   50        39    50
+                          /  \             / 
+                        30    39         30   
+
+                --------------------------------------------------*/
+
+                case(2):
+                {
+                    auto LeftLeft = leftChild_->LeftChildPtr();
+                    auto LeftRight = leftChild_->RightChildPtr();
+
+                    if(*LeftLeft > *LeftRight)
+                    {
+                        SetLeftChild(LeftLeft);
+                        leftChild_->SetLeftChild(LeftRight);
+                    }
+                    else
+                    {
+                        SetLeftChild(LeftRight);
+                        leftChild_->SetLeftChild(LeftLeft);
+                    }
+
+                    break;
+                }
+            }
+        }       
+
+        //==================================================================
+
+        /*----------------------------
+
+            Delete Right Child
+
+        ---------------------------*/
+
+        void DeleteRightChild()
+        {
+            
+            /*-------------------------------------
+
+                case 1: R child is a leaf
+
+                    BEFORE:             AFTER:
+
+                        40              40
+                       /  \            /
+                     35    [55]       35
+    
+            -------------------------------------*/
+
+            if(rightChild_->IsLeaf())
+            {
+                rightChild_.reset();
+                return;
+            }
+
+            // there are children nodes that need to 
+            // be reassigned.
+
+            int children {0};
+
+            if(rightChild_->HasLeftChild())
+                children++;
+
+            if(rightChild_->HasRightChild())
+                children++;
+
+            switch(children)
+            {
+                /*-----------------------------------------
+
+                        case 2: child has 1 child
+
+                            BEFORE:         AFTER:
+
+                              40              40
+                             /  \            /  \
+                          [35]   55        30    55
+                          /
+                         30
+
+                ------------------------------------------*/
+
+                case(1):
+                {
+                    if(rightChild_->HasLeftChild())
+                    {
+                        SetRightChild(rightChild_->leftChild_);
+                    }
+                    else
+                    {
+                        SetRightChild(rightChild_->rightChild_);
+                    }
+
+                    break;
+                }
+
+                /*--------------------------------------------
+
+                    case 3: R child has 2 children
+
+                            BEFORE:             AFTER:
+
+                            40                  40
+                              \                  \
+                             [50]                 45
+                             /  \                  \
+                            45   55                 55
+
+                ---------------------------------------------*/
+
+                case(2):
+                {
+                    auto RightLeft = rightChild_->LeftChildPtr();
+                    auto RightRight = rightChild_->RightChildPtr();
+
+                    if(*RightLeft < *RightRight)
+                    {
+                        SetRightChild(RightLeft);
+                        rightChild_->SetRightChild(RightRight);
+                    }
+                    else
+                    {
+                        SetRightChild(RightRight);
+                        rightChild_->SetRightChild(RightLeft);
+                    }
+
+                    break;
+                }
+            }
+        }       
     };
 }
