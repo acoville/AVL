@@ -10,7 +10,7 @@
 
 namespace AVL
 {
-    template<typename T, class invariant = std::less<T>>
+    template<typename T, class invariant>
     class b_node
     {
         protected: 
@@ -30,7 +30,7 @@ namespace AVL
 
         // constructors
 
-        b_node(const T &obj, const invariant &comp) : 
+        b_node(const T &obj, const invariant comp) : 
             comp_ {comp},
             data_ {std::make_shared<T>(obj)}
         {}
@@ -71,28 +71,28 @@ namespace AVL
 
         bool operator > (const b_node &other) const
         {
-            return(*data_ > other.Data());
+            return comp_(other.Data(), *data_);
         }
 
         //-------------------------------------------
 
         bool operator > (const T &obj) const
         {
-            return(*data_ > obj);
+            return comp_(obj, *data_);
         }
 
         //==================================================
 
         bool operator < (const b_node &other) const
         {
-            return (*data_ < other.Data());
+            return comp_(*data_, other.Data());
         }
 
         //-----------------------------------------
 
         bool operator < (const T &obj) const 
         {
-            return (*data_ < obj);
+            return comp_(*data_, obj);
         }
 
         //===================================================
@@ -161,6 +161,13 @@ namespace AVL
             return *leftChild_;
         }
 
+        //------------------------
+
+        std::shared_ptr<b_node> & LeftChildPtr()
+        {
+            return leftChild_;
+        }
+
         //---------------------------------------------
 
         // create a new node pointing to obj
@@ -169,9 +176,6 @@ namespace AVL
         {
             leftChild_ = std::make_shared<b_node>(obj, comp_);
             leftChild_->SetHeight(height_ + 1);
-            
-            //leftChild_->parent_ = &this;
-
             leftChild_->parent_ = std::make_shared<b_node>(*this);
         }
 
@@ -199,6 +203,36 @@ namespace AVL
             return (rightChild_ == nullptr) ? false : true;
         }
 
+        //-----------------------------------------------
+
+        b_node & RightChild()
+        {
+            return *rightChild_;
+        }
+
+        std::shared_ptr<b_node> & RightChildPtr()
+        {
+            return rightChild_;
+        }
+
+        //-----------------------------------------------
+
+        void SetRightChild(const T &obj)
+        {
+            rightChild_ = std::make_shared<b_node>(obj, comp_);
+            rightChild_->SetHeight(height_ + 1);
+            rightChild_->parent_ = std::make_shared<b_node>(*this);
+        }
+
+        //-------------------------------------------------
+
+        void SetRightChild(std::shared_ptr<b_node> &other)
+        {
+            rightChild_ = other;
+            rightChild_->SetHeight(height_ + 1);
+            rightChild_->parent_ = &this;
+        }
+
         //============================================================
 
         /*---------------------------------
@@ -218,11 +252,6 @@ namespace AVL
         {
             return *parent_; 
         }
-
-//        void SetParent(b_node &other)
-//        {
-//            parent_ = std::make_shared<b_node>(other);
-//        }
 
         //============================================================
 

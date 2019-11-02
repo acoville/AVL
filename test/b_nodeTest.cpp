@@ -48,19 +48,6 @@ namespace AVL::test
         REQUIRE(node1 > node2);
     }
 
-    //===========================================================
-
-    TEST_CASE("Left Child bool operator", "[B node]")
-    {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
-        
-        REQUIRE(!node1.HasLeftChild());
-
-        node1.SetLeftChild(15);
-
-        REQUIRE(node1.HasLeftChild());
-    }
-
     //==============================================================
 
     TEST_CASE("Equality Operator TRUE Test (raw pointer) ", "[B node]")
@@ -134,26 +121,21 @@ namespace AVL::test
 
     //===================================================================
 
-
-    TEST_CASE("Set Child to a smart pointer Test", "[B node]")
+    TEST_CASE("Has Right Child TRUE test", "[B node]")
     {
         auto root {b_node<int, std::less<int>>(25, comp)};
 
-        root.SetLeftChild(15);
+        root.SetRightChild(29);
 
-        auto left = root.LeftChild();
-
-        REQUIRE(left.HasParent());
-        auto leftParent = left.Parent();
-        REQUIRE(leftParent == root);
-        
-
-        REQUIRE(root.HasLeftChild());
-        auto rootChild = root.LeftChild();
-        REQUIRE(rootChild == root.LeftChild());
+        REQUIRE(root.HasRightChild());
     }
 
     //===================================================================
 
+    TEST_CASE("Has Right Child FALSE test", "[B node]")
+    {
+        auto root {b_node<int, std::less<int>>(25, comp)};
 
+        REQUIRE(!root.HasRightChild());
+    }
 }
