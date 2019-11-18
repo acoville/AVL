@@ -19,7 +19,7 @@ namespace AVL
         protected: 
 
         invariant comp_;
-        std::shared_ptr<T> data_;
+        std::shared_ptr<T> data_ {nullptr};
 
         std::shared_ptr<b_node> leftChild_ {nullptr};
         std::shared_ptr<b_node> rightChild_ {nullptr};
@@ -34,6 +34,8 @@ namespace AVL
 
         // constructors
 
+        b_node() = default;
+        
         b_node(const T &obj, const invariant comp) : 
             comp_ {comp},
             data_ {std::make_shared<T>(obj)}
@@ -276,6 +278,13 @@ namespace AVL
             return *parent_; 
         }
 
+        //-------------------------------------
+
+        std::shared_ptr<b_node<T, invariant>> & ParentPtr()
+        {
+            return parent_;
+        }
+
         //============================================================
 
         int Height() const
@@ -308,7 +317,7 @@ namespace AVL
         {
             /*-----------------------------------------
 
-                    BEFORE:             AFTER:
+                    BEFORE:            AFTER:
 
                         40              40
                        /  \               \

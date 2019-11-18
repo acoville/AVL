@@ -27,7 +27,7 @@ namespace AVL
 
             virtual ~avl_tree()
             {}
-
+/*
             //========================================================
 
             virtual void Insert(const T &obj)
@@ -41,6 +41,7 @@ namespace AVL
             {
 
             }
+*/
     };
 }
 

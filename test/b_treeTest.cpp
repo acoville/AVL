@@ -84,5 +84,60 @@ namespace AVL::test
         REQUIRE(leftMostLeaf.Data() == 120);
     }
 
-    
+    //========================================================================
+
+    TEST_CASE("Test of Find TRUE", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
+                
+        auto t {b_tree<int>()};
+
+        for(auto &n : nums)
+            t += n;
+
+        b_node<int, std::less<int>> out {};
+        bool found = t.Find(130, out);
+
+        REQUIRE(found);
+        REQUIRE(out.Data() == 130);
+    }
+
+    //=========================================================================
+
+    TEST_CASE("Test of Find FALSE", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
+                
+        auto t {b_tree<int>()};
+
+        for(auto &n : nums)
+            t += n;
+
+        b_node<int, std::less<int>> out {};
+        bool found = t.Find(500, out);
+
+        REQUIRE(!found);
+    }
+
+    //==========================================================================
+
+    TEST_CASE("Test of Delete Function", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
+                
+        auto t {b_tree<int>()};
+
+        for(auto &n : nums)
+            t += n;
+
+        int size_before {t.Size()};
+
+        t.Delete(128);
+
+        int size_after {t.Size()};
+        b_node <int, std::less<int>> out {};
+
+        REQUIRE(size_after == size_before -1);
+        REQUIRE(!t.Find(128, out));
+    }
 }

@@ -306,5 +306,4 @@ namespace AVL::test
         REQUIRE(root.RightChild().HasRightChild());
         REQUIRE(root.RightChild().RightChild().Data() == 55);
     }
-
 }

@@ -46,6 +46,13 @@ namespace AVL
                 Insert(obj);
             }
 
+            //------------------------------------
+
+            int Size() const
+            {
+                return size_;
+            }
+
             //========================================================
 
             virtual void Insert(const T &obj)
@@ -57,7 +64,7 @@ namespace AVL
                 }
 
                 size_++;
-                auto It = root_;
+                auto It {root_};
 
                 INSERT:
 
@@ -93,17 +100,108 @@ namespace AVL
             }
 
             //========================================================
-            
+
+            /*----------------------------------------
+
+                I wonder what happens
+                if you delete the root node? Does
+                root get reassigned or do we 
+                lose the whole tree? 
+
+            ----------------------------------------*/
+
             virtual void Delete(const T &obj)
             {
+                auto it {root_};
 
+                BEGIN: 
+
+                if(it->Data() == obj)
+                {
+                    if(it->HasParent())
+                    {
+                        auto parent = it->Parent();
+
+                        if(*it < parent)
+                        {
+                            parent.DeleteLeftChild();
+                        }
+                        else
+                        {
+                            parent.DeleteRightChild();
+                        }  
+                    }
+                    else
+                    {
+                        root_.reset();
+                    }
+
+                    size_--;
+                    return;    
+                }
+
+                // left subtree
+
+                if(*it > obj)
+                {
+                    it = it->LeftChildPtr();
+                    goto BEGIN;
+                }
+
+                // right subtree
+
+                else
+                {
+                    it = it->RightChildPtr();
+                    goto BEGIN;
+                }
+                
             }
 
             //=========================================================
 
-            b_node<T, invariant> & Find(const T &obj)
-            {
+            /*-------------------------------------
 
+                corner case: what to do if 
+                obj isn't found? 
+
+            -------------------------------------*/
+
+            bool Find(const T &obj, b_node<T, invariant> &out)
+            {
+                auto it {root_};
+
+                BEGIN:
+
+                if(it->Data() == obj)
+                {
+                    out = *it;
+                    return true;
+                }
+
+                // left subtree
+
+                if(obj < it->Data())
+                {
+                    if(it->HasLeftChild())
+                    {
+                        it = it->LeftChildPtr();
+                        goto BEGIN;
+                    }
+                }
+
+                // right subtree
+
+                else
+                {
+                    if(it->HasRightChild())
+                    {
+                        it = it->RightChildPtr();
+                        goto BEGIN;
+                    }
+                }
+
+                return false;
             }
     };
 }
