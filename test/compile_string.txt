@@ -1,0 +1,1 @@
+clang++ -std=c++1z -Wall -Wextra -o build/unit_test.out testrunner.cpp b_nodeTest.cpp b_treeTest.cpp avl_treeTest.cpp

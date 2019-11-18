@@ -5,13 +5,15 @@
 
 ===============================================*/
 
+#ifndef AVL_TREE_HPP
+#define AVL_TREE_HPP
+
 #include "b_tree.hpp"
-#include "avl_node.hpp"
 
 namespace AVL
 {
     template <typename T, class invariant = std::less<T>>
-    class avl_tree : public b_tree<T, invariant>
+    class avl_tree : public b_tree <T, invariant>
     {
         protected: 
 
@@ -28,16 +30,18 @@ namespace AVL
 
             //========================================================
 
-            virtual Insert(const T &obj)
+            virtual void Insert(const T &obj)
             {
 
             }
 
             //=======================================================
 
-            virtual Delete(const T &obj)
+            virtual void Delete(const T &obj)
             {
 
             }
     };
 }
+
+#endif

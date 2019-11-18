@@ -14,7 +14,7 @@ namespace AVL::test
 
     TEST_CASE("B Tree Construction Test", "[B Tree]")
     {
-        auto t = b_tree<int, std::less<int>>();
+        auto t = b_tree<int>();
     }
 
     //============================================================
@@ -22,7 +22,7 @@ namespace AVL::test
     TEST_CASE("Insert to an empty Tree Test", "[B Tree]")
     {
         int i {25};
-        auto t = b_tree<int, std::less<int>>();
+        auto t = b_tree<int>();
 
         t.Insert(i);
 
@@ -43,7 +43,7 @@ namespace AVL::test
     TEST_CASE("Insert Left Child Test", "[B Tree]")
     {
         auto nums = std::vector<int>{25, 12};
-        auto t = b_tree<int, std::less<int>>();
+        auto t = b_tree<int>();
 
         for(auto &n : nums)
             t.Insert(n);
@@ -70,7 +70,7 @@ namespace AVL::test
     TEST_CASE("Smallish Insertion Accuracy Test", "[B Tree]")
     {
         auto nums = std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120};
-        auto t = b_tree<int, std::less<int>>();
+        auto t = b_tree<int>();
 
         for(auto &n : nums)
             t += n;

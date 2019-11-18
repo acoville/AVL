@@ -5,6 +5,9 @@
 
 ======================================================*/
 
+#ifndef B_TREE_HPP
+#define B_TREE_HPP
+
 #include "b_node.hpp"
 
 namespace AVL
@@ -29,15 +32,15 @@ namespace AVL
             virtual ~b_tree()
             {}
 
-            //========================================================
+            //------------------------------------
 
             std::shared_ptr<b_node<T, invariant>> Root()
             {
                 return root_;
             }
 
-            //========================================================
-
+            //------------------------------------
+            
             void operator += (const T &obj)
             {
                 Insert(obj);
@@ -53,14 +56,10 @@ namespace AVL
                     return;
                 }
 
-                //----------------------
-
                 size_++;
                 auto It = root_;
 
                 INSERT:
-
-                //----------------------
 
                 // left subtree
 
@@ -76,8 +75,6 @@ namespace AVL
                         It->SetLeftChild(obj);
                     }
                 }
-
-                //----------------------
 
                 // right subtree
 
@@ -96,7 +93,7 @@ namespace AVL
             }
 
             //========================================================
-/*
+            
             virtual void Delete(const T &obj)
             {
 
@@ -108,6 +105,7 @@ namespace AVL
             {
 
             }
-*/
     };
 }
+
+#endif

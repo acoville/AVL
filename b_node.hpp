@@ -5,12 +5,15 @@
 
 =========================================================*/
 
+#ifndef B_NODE_HPP
+#define B_NODE_HPP
+
 #include <memory>
 #include <functional>
 
 namespace AVL
 {
-    template<typename T, class invariant>
+    template <typename T, class invariant>
     class b_node
     {
         protected: 
@@ -173,7 +176,7 @@ namespace AVL
 
         // create a new node pointing to obj
 
-        void SetLeftChild(const T &obj)
+        virtual void SetLeftChild(const T &obj)
         {
             leftChild_ = std::make_shared<b_node>(obj, comp_);
             leftChild_->SetHeight(height_ + 1);
@@ -187,7 +190,7 @@ namespace AVL
 
         // overload directly reassigning the left child pointer
 
-        void SetLeftChild(std::shared_ptr<b_node> &other)
+        virtual void SetLeftChild(std::shared_ptr<b_node> &other)
         {
             leftChild_ = other;
             leftChild_->SetHeight(height_ + 1);
@@ -231,7 +234,7 @@ namespace AVL
 
         //-----------------------------------------------
 
-        void SetRightChild(const T &obj)
+        virtual void SetRightChild(const T &obj)
         {
             rightChild_ = std::make_shared<b_node>(obj, comp_);
             rightChild_->SetHeight(height_ + 1);
@@ -498,3 +501,5 @@ namespace AVL
         }       
     };
 }
+
+#endif
