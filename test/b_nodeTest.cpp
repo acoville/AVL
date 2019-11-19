@@ -70,6 +70,26 @@ namespace AVL::test
 
     //================================================================
 
+    TEST_CASE("Copy Assignment Operator equality test", "[B node]")
+    {
+        auto node1 {b_node<int, std::less<int>>(25, comp)};
+        auto node2 = node1;
+
+        REQUIRE(node1 == node2);
+    }
+
+    //================================================================
+
+    TEST_CASE("Copy Constructor equality test", "[B node]")
+    {
+        auto node1 {b_node<int, std::less<int>>(25, comp)};
+        auto node2(node1);
+
+        REQUIRE(node2 == node1);
+    }
+
+    //================================================================
+
     TEST_CASE("Equality Operator FALSE test", "[B node]")
     {
         auto node1 {b_node<int, std::less<int>>(25, comp)};

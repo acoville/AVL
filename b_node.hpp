@@ -328,6 +328,7 @@ namespace AVL
             if(leftChild_->IsLeaf())
             {
                 leftChild_.reset();
+                leftChild_ = nullptr;
                 return;
             }
 
@@ -430,6 +431,7 @@ namespace AVL
             if(rightChild_->IsLeaf())
             {
                 rightChild_.reset();
+                rightChild_ = nullptr;
                 return;
             }
 
@@ -507,7 +509,7 @@ namespace AVL
                     break;
                 }
             }
-        }       
+        }     
     };
 }
 

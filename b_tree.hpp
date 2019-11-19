@@ -42,9 +42,9 @@ namespace AVL
 
             //------------------------------------
 
-            std::shared_ptr<b_node<T, invariant>> Root()
+            b_node<T, invariant> & Root()
             {
-                return root_;
+                return *root_;
             }
 
             //------------------------------------
@@ -122,16 +122,15 @@ namespace AVL
             {
                 auto it {root_};
 
-                BEGIN: 
-
-                if(it->Data() == obj)
+                if(Find(obj, *it))
                 {
                     auto parent = it->ParentPtr();
-                    
-                    if(it->Data() < parent->Data()) 
+
+                    if(it->Data() < parent->Data())
                     {
                         parent->DeleteLeftChild();
                     }
+
                     else
                     {
                         parent->DeleteRightChild();
@@ -139,44 +138,6 @@ namespace AVL
 
                     size_--;
                 }
-
-                //------ left subtree
-
-                if(it->Data() > obj)
-                {
-                    if(it->HasLeftChild())
-                    {
-                        it = it->LeftChildPtr();
-                        goto BEGIN;
-                    }
-
-                    else
-                    {
-                        // did not work. Exit. 
-
-                        return;
-                    }
-                }
-
-                //------- right subtree
-
-                else
-                {
-                    if(it->HasRightChild())
-                    {
-                        it = it->RightChildPtr();
-                        goto BEGIN;
-                    }
-
-                    else
-                    {
-                        // did not work, Exit.
-
-                        return;
-                    }
-                }
-
-                return;
             }
 
             //=========================================================
@@ -190,7 +151,7 @@ namespace AVL
 
             bool Find(const T &obj, b_node<T, invariant> &out)
             {
-                auto it {root_};
+                auto it = root_;
 
                 BEGIN:
 
