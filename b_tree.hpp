@@ -26,6 +26,14 @@ namespace AVL
         public: 
 
             b_tree() = default;
+
+            //------------------------------------
+
+            b_tree(std::vector<T> &objs)
+            {
+                for(auto &o : objs)
+                    Insert(o);
+            }
             
             //------------------------------------
 
@@ -118,44 +126,57 @@ namespace AVL
 
                 if(it->Data() == obj)
                 {
-                    if(it->HasParent())
+                    auto parent = it->ParentPtr();
+                    
+                    if(it->Data() < parent->Data()) 
                     {
-                        auto parent = it->Parent();
-
-                        if(*it < parent)
-                        {
-                            parent.DeleteLeftChild();
-                        }
-                        else
-                        {
-                            parent.DeleteRightChild();
-                        }  
+                        parent->DeleteLeftChild();
                     }
                     else
                     {
-                        root_.reset();
+                        parent->DeleteRightChild();
                     }
 
                     size_--;
-                    return;    
                 }
 
-                // left subtree
+                //------ left subtree
 
-                if(*it > obj)
+                if(it->Data() > obj)
                 {
-                    it = it->LeftChildPtr();
-                    goto BEGIN;
+                    if(it->HasLeftChild())
+                    {
+                        it = it->LeftChildPtr();
+                        goto BEGIN;
+                    }
+
+                    else
+                    {
+                        // did not work. Exit. 
+
+                        return;
+                    }
                 }
 
-                // right subtree
+                //------- right subtree
 
                 else
                 {
-                    it = it->RightChildPtr();
-                    goto BEGIN;
+                    if(it->HasRightChild())
+                    {
+                        it = it->RightChildPtr();
+                        goto BEGIN;
+                    }
+
+                    else
+                    {
+                        // did not work, Exit.
+
+                        return;
+                    }
                 }
-                
+
+                return;
             }
 
             //=========================================================

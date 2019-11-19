@@ -14,7 +14,19 @@ namespace AVL::test
 
     TEST_CASE("B Tree Construction Test", "[B Tree]")
     {
-        auto t = b_tree<int>();
+        auto t {b_tree<int>()};
+
+        REQUIRE(t.Size() == 0);
+    }
+
+    //============================================================
+
+    TEST_CASE("Construction using a vector", "[B Tree]")
+    {
+        auto v {std::vector<int>{12, 55, 125, 225, 275}};
+        auto t {b_tree<int>(v)};
+
+        REQUIRE(t.Size() == 4);
     }
 
     //============================================================
