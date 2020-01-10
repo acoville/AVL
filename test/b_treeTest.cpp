@@ -107,18 +107,14 @@ namespace AVL::test
             /  \              /   \
           127   135        170     177
          /   \
-       120   128
+       120   [128]
 
     ------------------------------------*/
 
     TEST_CASE("Test of Find TRUE", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
-                
-        auto t {b_tree<int>()};
-
-        for(auto &n : nums)
-            t += n;
+        auto t {b_tree<int>(nums)};
 
         b_node<int, std::less<int>> out {};
         bool found = t.Find(128, out);
@@ -131,11 +127,7 @@ namespace AVL::test
     TEST_CASE("Test of Find FALSE", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
-                
-        auto t {b_tree<int>()};
-
-        for(auto &n : nums)
-            t += n;
+        auto t {b_tree<int>(nums)};
 
         b_node<int, std::less<int>> out {};
         bool found = t.Find(500, out);
@@ -163,7 +155,7 @@ namespace AVL::test
 
     //==========================================================================
 
-    TEST_CASE("Deleting root node makes the tree return boolean false", "[B tree]")
+    TEST_CASE("Deleting root node makes the tree return boolean false again", "[B tree]")
     {
         auto t {b_tree<int>()};
         t += 155;
@@ -184,7 +176,7 @@ namespace AVL::test
     
     --------------------------------------*/
 
-    TEST_CASE("Test of FIND false after a delete in right subtree", "[B tree]")
+    TEST_CASE("Test of FIND returns false after a delete in right subtree", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175}};
         auto t {b_tree<int>(nums)};

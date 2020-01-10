@@ -171,12 +171,15 @@ namespace AVL
 
             //=========================================================
 
-            /*-------------------------------------
+            /*---------------------------------------
 
-                corner case: what to do if 
-                obj isn't found? 
+                Binary Search Find function
 
-            -------------------------------------*/
+                returns T if the value is found, 
+                and modifies the out parameter
+                to the node containing the value
+
+            ---------------------------------------*/
 
             bool Find(const T &obj, b_node<T, invariant> &out = b_node<T, invariant>())
             {
@@ -186,6 +189,8 @@ namespace AVL
                 {
                     return false;
                 }
+
+                // otherwise, begin binary search at root node
 
                 auto it = root_;
 
@@ -206,6 +211,10 @@ namespace AVL
                         it = it->LeftChildPtr();
                         goto BEGIN;
                     }
+                    else
+                    {
+                        goto END;
+                    }
                 }
 
                 // right subtree
@@ -217,7 +226,17 @@ namespace AVL
                         it = it->RightChildPtr();
                         goto BEGIN;
                     }
+                    else
+                    {
+                        goto END;
+                    }
+                    
                 }
+
+                // if we have reached a leaf node, then the 
+                // value is not in the tree.
+
+                END:
 
                 return false;
             }

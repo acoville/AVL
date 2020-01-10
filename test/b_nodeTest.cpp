@@ -116,7 +116,6 @@ namespace AVL::test
     TEST_CASE("Has Left Child FALSE test", "[B node]")
     {
         auto root {b_node<int, std::less<int>>(25, comp)};
-
         REQUIRE(!root.HasLeftChild());
     }
 
@@ -144,7 +143,6 @@ namespace AVL::test
     TEST_CASE("Has Right Child TRUE test", "[B node]")
     {
         auto root {b_node<int, std::less<int>>(25, comp)};
-
         root.SetRightChild(29);
 
         REQUIRE(root.HasRightChild());
@@ -155,7 +153,6 @@ namespace AVL::test
     TEST_CASE("Has Right Child FALSE test", "[B node]")
     {
         auto root {b_node<int, std::less<int>>(25, comp)};
-
         REQUIRE(!root.HasRightChild());
     }
 
@@ -325,18 +322,5 @@ namespace AVL::test
 
         REQUIRE(root.RightChild().HasRightChild());
         REQUIRE(root.RightChild().RightChild().Data() == 55);
-    }
-
-    //=============================================================================
-
-    /*---------------------------------
-
-        Educational Test Only: 
-            I would like to know if 
-            adding children increases
-            the reference count
-
-    ----------------------------------*/
-
-    
+    }    
 }

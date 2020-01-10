@@ -440,8 +440,7 @@ namespace AVL
         ---------------------------*/
 
         void DeleteRightChild()
-        {
-            
+        { 
             /*-------------------------------------
 
                 case 1: R child is a leaf
