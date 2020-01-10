@@ -156,9 +156,7 @@ namespace AVL::test
 
         REQUIRE(t.Find(155, node));
 
-        //node.Reset();
-
-        t.Delete(root);
+        node.Reset();
 
         REQUIRE(!t.Find(155, node));
     }

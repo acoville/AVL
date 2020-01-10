@@ -15,7 +15,3 @@ add_executable(unit_test.out
                 test/b_nodeTest.cpp
                 test/b_treeTest.cpp
                 test/avl_treeTest.cpp)
-
-#target_link_libraries(unit_test.out unit_tests)
-
-#target_include_directories(unit_test.out PUBLIC "${PROJECT_BINARY_DIR}/test")
