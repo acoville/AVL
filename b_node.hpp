@@ -78,6 +78,9 @@ namespace AVL
 
         /*-----------------------------
 
+            Reset function releases
+            calling object's claim to the 
+            shared pointer
 
         -----------------------------*/
 
@@ -144,6 +147,13 @@ namespace AVL
             {
                 return false;
             }
+        }
+
+        //===================================================
+
+        operator bool () const
+        {
+            return(data_ == nullptr) ? false : true;
         }
 
         //===================================================

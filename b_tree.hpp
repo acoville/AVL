@@ -1,6 +1,6 @@
 /*======================================================
 
-    Binary Tree
+    Binary Search Tree
 
 
 ======================================================*/
@@ -27,7 +27,15 @@ namespace AVL
 
             b_tree() = default;
 
-            //------------------------------------
+            //=====================================================
+
+            /*------------------------------
+
+                Constructor accpepting a 
+                vector of objects to insert
+                into the tree.
+
+            ------------------------------*/
 
             b_tree(std::vector<T> &objs)
             {
@@ -35,16 +43,25 @@ namespace AVL
                     Insert(o);
             }
             
-            //------------------------------------
+            //==========================================
 
             virtual ~b_tree()
             {}
 
-            //------------------------------------
+            //==========================================
+
+            // getters
 
             b_node<T, invariant> & Root()
             {
                 return *root_;
+            }
+
+            //------------------------------------
+
+            operator bool() const
+            {
+                return(root_ == nullptr) ? false : true;
             }
 
             //------------------------------------
@@ -111,10 +128,7 @@ namespace AVL
 
             /*----------------------------------------
 
-                I wonder what happens
-                if you delete the root node? Does
-                root get reassigned or do we 
-                lose the whole tree? 
+                Delete
 
             ----------------------------------------*/
 
@@ -122,35 +136,34 @@ namespace AVL
             {
                 auto it {root_};
 
-                if(Find(obj, *it))
+                if(root_->Data() == obj)
                 {
-                    if(it->Data() == obj)
+                    root_->Reset();
+                }
+
+                // otherwise, we are deleting a child node
+                // the node class will handle how to reassign
+                // its own child/ren
+
+                else
+                {
+                    auto found = Find(obj, *it);
+                    auto parent = it->Parent();
+
+                    // is it parent's left child? 
+
+                    if(it->Data() < parent.Data())
                     {
-                        root_.reset();
+                        parent.DeleteLeftChild();
                     }
 
-                    /*   
-                        we will have to use the parent's 
-                        delete L / R child() function to ensure
-                        children are reassigned appropriately.
+                    // must be parent's right child,
+                    // equal nodes are undefined in a BST
 
                     else
                     {
-                        auto parent {it->ParentPtr()};
-
-                        if(it->Data() < parent->Data())
-                        {
-                            parent->DeleteLeftChild();
-                        }
-
-                        else
-                        {
-                            parent->DeleteRightChild();
-                        }
-
-                        size_--;
+                        parent.DeleteRightChild();
                     }
-                    */
                 }
             }
 
@@ -165,14 +178,14 @@ namespace AVL
 
             bool Find(const T &obj, b_node<T, invariant> &out)
             {
-                auto it = root_;
-
                 // exit if root_ is null
 
                 if(!root_)
                 {
                     return false;
                 }
+
+                auto it = root_;
 
                 BEGIN:
 

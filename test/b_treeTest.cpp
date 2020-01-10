@@ -145,20 +145,25 @@ namespace AVL::test
 
     //==========================================================================
 
-    TEST_CASE("Test of Delete function with 1 node", "[B tree]")
+    TEST_CASE("Test of Delete function with 1 node (root) tree", "[B tree]")
     {
         auto t {b_tree<int>()};
-        int root {155};
 
-        t += root;
+        REQUIRE(!t);
 
-        auto node = t.Root();
+        t += 155;
 
+        REQUIRE(t);
+/*
+
+        auto node = b_node<int, std::less<int>>();
         REQUIRE(t.Find(155, node));
-
         t.Delete(155);
 
-        REQUIRE(!t.Find(155, node));
+        bool found = t.Find(155, node);
+
+//        REQUIRE(!t.Find(155, node));
+*/
     }
 
     //==========================================================================
@@ -169,9 +174,8 @@ namespace AVL::test
 
             155                  155
            /   \                /
-         130   175            130
+         130   [175]          130
     
-    -----------------------------------*/
 
     TEST_CASE("Test of FIND false after a delete in right subtree", "[B tree]")
     {
@@ -191,4 +195,105 @@ namespace AVL::test
 
         REQUIRE(!found);
     }
+    -----------------------------------*/
+
+    //==========================================================================
+
+    /*------------------------------------
+
+          BEFORE                AFTER      
+
+            155                  155
+           /   \                    \
+        [130]   175                 175
+
+
+    TEST_CASE("Test of FIND false after a delete in left subtree", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175}};
+                
+        auto t {b_tree<int>()};
+
+        for(auto &n : nums)
+            t += n;
+
+        b_node<int, std::less<int>> out {};
+        bool found = t.Find(175, out);
+
+        t.Delete(130);
+        //auto root = t.Root();
+
+
+        //found = t.Find(130, out);
+
+        //REQUIRE(!found);
+    }
+    -----------------------------------*/
+
+    //==============================================================
+
+    /*----------------------------------
+
+        BEFORE:         AFTER: 
+
+           50             50
+          /              /
+       [40]             30
+        /
+      30
+
+    ----------------------------------*/
+
+/*
+    TEST_CASE("Delete Left Child case 2: 1 granchild", "[B tree]")
+    {
+        auto nums = std::vector<int>{50, 40, 30};
+
+        auto t = b_tree<int>{nums};
+
+        // 30 can be found 
+
+        b_node<int, std::less<int>> out {};
+        bool found = t.Find(30, out);
+
+        REQUIRE(found);       
+        
+        t.Delete(40);
+
+        // 30 can still be found 
+
+        found = t.Find(30, out);
+
+        // 50 still has a left child
+
+        auto root = t.Root();
+
+        //REQUIRE(t.Root().HasLeftChild());
+
+
+        // 30 is 50's left child
+
+        auto leftChild = t.Root().LeftChild();
+        REQUIRE(leftChild.Data() == 30);
+    }    
+*/
+
+    //===============================================================
+
+    /*----------------------------------
+
+        BEFORE:         AFTER: 
+
+           50             50
+             \              \
+             [70]            80
+                \
+                 80
+
+
+    TEST_CASE("Delete Right Child case 2: 1 granchild", "[B tree]")
+    {
+
+    }    
+    ----------------------------------*/
 }
