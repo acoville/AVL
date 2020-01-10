@@ -171,6 +171,7 @@ namespace AVL::test
            /   \                /
          130   175            130
     
+    -----------------------------------*/
 
     TEST_CASE("Test of FIND false after a delete in right subtree", "[B tree]")
     {
@@ -190,5 +191,4 @@ namespace AVL::test
 
         REQUIRE(!found);
     }
-    -----------------------------------*/
 }
