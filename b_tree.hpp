@@ -167,6 +167,13 @@ namespace AVL
             {
                 auto it = root_;
 
+                // exit if root_ is null
+
+                if(!root_)
+                {
+                    return false;
+                }
+
                 BEGIN:
 
                 if(it->Data() == obj)
