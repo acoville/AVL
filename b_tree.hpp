@@ -138,7 +138,7 @@ namespace AVL
 
                 if(root_->Data() == obj)
                 {
-                    root_->Reset();
+                    root_.reset();
                 }
 
                 // otherwise, we are deleting a child node
@@ -147,22 +147,24 @@ namespace AVL
 
                 else
                 {
-                    auto found = Find(obj, *it);
-                    auto parent = it->Parent();
-
-                    // is it parent's left child? 
-
-                    if(it->Data() < parent.Data())
+                    if(Find(obj, *it))
                     {
-                        parent.DeleteLeftChild();
-                    }
+                        auto parent = it->Parent();
+                 
+                        // is it parent's left child? 
 
-                    // must be parent's right child,
-                    // equal nodes are undefined in a BST
+                        if(it->Data() < parent.Data())
+                        {
+                            parent.DeleteLeftChild();
+                        }
 
-                    else
-                    {
-                        parent.DeleteRightChild();
+                        // must be parent's right child,
+                        // equal nodes are undefined in a BST
+
+                        else
+                        {
+                            parent.DeleteRightChild();
+                        }
                     }
                 }
             }
@@ -176,7 +178,7 @@ namespace AVL
 
             -------------------------------------*/
 
-            bool Find(const T &obj, b_node<T, invariant> &out)
+            bool Find(const T &obj, b_node<T, invariant> &out = b_node<T, invariant>())
             {
                 // exit if root_ is null
 

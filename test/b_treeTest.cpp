@@ -145,30 +145,36 @@ namespace AVL::test
 
     //==========================================================================
 
-    TEST_CASE("Test of Delete function with 1 node (root) tree", "[B tree]")
+    TEST_CASE("An empty tree returns boolean false", "[B tree]")
     {
         auto t {b_tree<int>()};
-
         REQUIRE(!t);
-
-        t += 155;
-
-        REQUIRE(t);
-/*
-
-        auto node = b_node<int, std::less<int>>();
-        REQUIRE(t.Find(155, node));
-        t.Delete(155);
-
-        bool found = t.Find(155, node);
-
-//        REQUIRE(!t.Find(155, node));
-*/
     }
 
     //==========================================================================
 
-    /*------------------------------------
+    TEST_CASE("A tree with 1 node returns boolean true", "[B tree]")
+    {
+        auto t {b_tree<int>()};
+        t += 155;
+
+        REQUIRE(t);
+    }
+
+    //==========================================================================
+
+    TEST_CASE("Deleting root node makes the tree return boolean false", "[B tree]")
+    {
+        auto t {b_tree<int>()};
+        t += 155;
+        t.Delete(155);
+
+        REQUIRE(!t);
+    }
+
+    //==========================================================================
+
+    /*--------------------------------------
 
           BEFORE                AFTER      
 
@@ -176,26 +182,27 @@ namespace AVL::test
            /   \                /
          130   [175]          130
     
+    --------------------------------------*/
 
     TEST_CASE("Test of FIND false after a delete in right subtree", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175}};
-                
-        auto t {b_tree<int>()};
-
-        for(auto &n : nums)
-            t += n;
+        auto t {b_tree<int>(nums)};
 
         b_node<int, std::less<int>> out {};
         bool found = t.Find(175, out);
+        REQUIRE(found);
+
+        bool leaf = out.IsLeaf();
+        REQUIRE(leaf);
 
         t.Delete(175);
 
         found = t.Find(175, out);
-
         REQUIRE(!found);
+/*
+*/
     }
-    -----------------------------------*/
 
     //==========================================================================
 
@@ -221,12 +228,10 @@ namespace AVL::test
         bool found = t.Find(175, out);
 
         t.Delete(130);
-        //auto root = t.Root();
+        auto root = t.Root();
 
-
-        //found = t.Find(130, out);
-
-        //REQUIRE(!found);
+        found = t.Find(130, out);
+        REQUIRE(!found);
     }
     -----------------------------------*/
 
