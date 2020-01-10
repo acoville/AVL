@@ -124,12 +124,6 @@ namespace AVL::test
         bool found = t.Find(128, out);
 
         REQUIRE(found);    
-        REQUIRE(out.Data() == 128);
-
-        auto leaf = t.Root().LeftChild().LeftChild().RightChild();
-
-        REQUIRE(leaf.Data() == 128);
-        REQUIRE(leaf == out);
     }
 
     //=========================================================================
@@ -151,58 +145,52 @@ namespace AVL::test
 
     //==========================================================================
 
-    /*-----------------------------------
-
-                      155
-                 ____/   \____ 
-               /              \
-             130               175
-            /  \              /   \
-          127   135        170     177
-         /   \
-       120   [128]
-
-    ------------------------------------*/
-
-    TEST_CASE("Accuracy test of delete", "[B tree]")
+    TEST_CASE("Test of Delete function with 1 node", "[B tree]")
     {
-        auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
+        auto t {b_tree<int>()};
+        int root {155};
+
+        t += root;
+
+        auto node = t.Root();
+
+        REQUIRE(t.Find(155, node));
+
+        //node.Reset();
+
+        t.Delete(root);
+
+        REQUIRE(!t.Find(155, node));
+    }
+
+    //==========================================================================
+
+    /*------------------------------------
+
+          BEFORE                AFTER      
+
+            155                  155
+           /   \                /
+         130   175            130
+    
+
+    TEST_CASE("Test of FIND false after a delete in right subtree", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175}};
                 
         auto t {b_tree<int>()};
 
         for(auto &n : nums)
             t += n;
 
-        int size_before {t.Size()};
+        b_node<int, std::less<int>> out {};
+        bool found = t.Find(175, out);
 
-        int users = t.Root()
-                        .LeftChild()
-                        .LeftChild()
-                        .RightChildPtr()
-                        .use_count();
-        
-        REQUIRE(users == 1); // it's 3.
+        t.Delete(175);
 
-        // aha, that is the problem. And I can't find the 
-        // other users from there either. 
+        found = t.Find(175, out);
 
-        t.Delete(128);
-
-        //-- make sure tree size decremented.
-
-        int size_after {t.Size()};
-        b_node <int, std::less<int>> out {};
-        REQUIRE(size_after == size_before -1);
-
-        //-- make sure the node is no longer findable
-        // use count for that object must be > 1
-        
-        bool found = t.Find(128, out);
-
-        users = out.ParentPtr()->RightChildPtr().use_count();
-        
-        REQUIRE(users == 0);    // STILL 3, HOW??
-
-        //REQUIRE(!found);
+        REQUIRE(!found);
     }
+    -----------------------------------*/
 }

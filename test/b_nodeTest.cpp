@@ -326,4 +326,17 @@ namespace AVL::test
         REQUIRE(root.RightChild().HasRightChild());
         REQUIRE(root.RightChild().RightChild().Data() == 55);
     }
+
+    //=============================================================================
+
+    /*---------------------------------
+
+        Educational Test Only: 
+            I would like to know if 
+            adding children increases
+            the reference count
+
+    ----------------------------------*/
+
+    
 }

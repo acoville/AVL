@@ -124,19 +124,33 @@ namespace AVL
 
                 if(Find(obj, *it))
                 {
-                    auto parent = it->ParentPtr();
-
-                    if(it->Data() < parent->Data())
+                    if(it->Data() == obj)
                     {
-                        parent->DeleteLeftChild();
+                        root_.reset();
                     }
+
+                    /*   
+                        we will have to use the parent's 
+                        delete L / R child() function to ensure
+                        children are reassigned appropriately.
 
                     else
                     {
-                        parent->DeleteRightChild();
-                    }
+                        auto parent {it->ParentPtr()};
 
-                    size_--;
+                        if(it->Data() < parent->Data())
+                        {
+                            parent->DeleteLeftChild();
+                        }
+
+                        else
+                        {
+                            parent->DeleteRightChild();
+                        }
+
+                        size_--;
+                    }
+                    */
                 }
             }
 
