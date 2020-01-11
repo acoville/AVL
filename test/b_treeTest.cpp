@@ -90,7 +90,6 @@ namespace AVL::test
         auto root = t.Root();
 
         REQUIRE(root.LeftChild().LeftChild().HasLeftChild());
-
         auto leftMostLeaf = root.LeftChild().LeftChild().LeftChild();
 
         REQUIRE(leftMostLeaf.Data() == 120);
@@ -116,10 +115,7 @@ namespace AVL::test
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
         auto t {b_tree<int>(nums)};
 
-        b_node<int, std::less<int>> out {};
-        bool found = t.Find(128, out);
-
-        REQUIRE(found);    
+        REQUIRE(t.Contains(128));    
     }
 
     //=========================================================================
@@ -129,10 +125,7 @@ namespace AVL::test
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
         auto t {b_tree<int>(nums)};
 
-        b_node<int, std::less<int>> out {};
-        bool found = t.Find(500, out);
-
-        REQUIRE(!found);
+        REQUIRE(!t.Contains(500));
     }
 
     //==========================================================================
@@ -173,26 +166,40 @@ namespace AVL::test
             155                  155
            /   \                /
          130   [175]          130
-    
+
     --------------------------------------*/
 
-    TEST_CASE("Test of FIND returns false after a delete in right subtree", "[B tree]")
+    TEST_CASE("Parent has no right child after deleting right child", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175}};
         auto t {b_tree<int>(nums)};
 
-        b_node<int, std::less<int>> out {};
-        bool found = t.Find(175, out);
-        REQUIRE(found);
+        t.Delete(175);
 
-        bool leaf = out.IsLeaf();
-        REQUIRE(leaf);
+        REQUIRE(!t.Root().HasRightChild());        
+    }
+
+    //=========================================================================
+
+     /*--------------------------------------
+
+          BEFORE                AFTER      
+
+            155                  155
+           /   \                /
+         130   [175]          130
+
+    --------------------------------------*/
+
+    TEST_CASE("Find is false after deleting right child", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175}};
+        auto t {b_tree<int>(nums)};
 
         t.Delete(175);
 
-        found = t.Find(175, out);
-        REQUIRE(!found);
-    }
+        REQUIRE(!t.Contains(175));
+    }   
 
     //==========================================================================
 

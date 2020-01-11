@@ -171,6 +171,14 @@ namespace AVL
 
             //=========================================================
 
+            bool Contains(const T &obj)
+            {
+                auto out = b_node<T, invariant>();
+                return(Find(obj, out));
+            }
+
+            //=========================================================
+
             /*---------------------------------------
 
                 Binary Search Find function
@@ -181,7 +189,7 @@ namespace AVL
 
             ---------------------------------------*/
 
-            bool Find(const T &obj, b_node<T, invariant> &out = b_node<T, invariant>())
+            bool Find(const T &obj, b_node<T, invariant> &out)
             {
                 // exit if root_ is null
 
