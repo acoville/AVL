@@ -44,6 +44,16 @@ namespace AVL::test
 
     //============================================================
 
+    TEST_CASE("Lambda invariant construction Test", "[B tree]")
+    {
+        auto t = b_tree<int, [](const int &lhs, const int &rhs)
+        {
+            return lhs < rhs;
+        }>();
+    }
+
+    //============================================================
+
     /*---------------------------
 
                 25
@@ -214,9 +224,9 @@ namespace AVL::test
         auto nums {std::vector<int>{155, 130, 175}};
         auto t {b_tree<int>(nums)};
 
-        int refcount = t.Root().LeftChildPtr().use_count();
+        int refcount = t.Root().LeftChildPtr().use_count(); // 3
         t.Delete(130);
-        refcount = t.Root().LeftChildPtr().use_count();
+        refcount = t.Root().LeftChildPtr().use_count(); // still 2
 
         REQUIRE(!t.RootPtr()->HasLeftChild());        
     }

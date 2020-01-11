@@ -162,9 +162,7 @@ namespace AVL
 
                         if(it.Data() < parent->Data())
                         {
-                            int refcount = parent->LeftChildPtr().use_count();
                             parent->DeleteLeftChild();
-                            refcount = parent->LeftChildPtr().use_count();
                         }
 
                         // must be parent's right child,
@@ -172,9 +170,7 @@ namespace AVL
 
                         else
                         {
-                            int refcount = parent->RightChildPtr().use_count();
                             parent->DeleteRightChild();
-                            refcount = parent->RightChildPtr().use_count();
                         }
                     }
                 }
