@@ -207,19 +207,19 @@ namespace AVL::test
            /   \                /
          130   [175]          130
 
+    --------------------------------------*/
 
     TEST_CASE("Parent has no right child after deleting right child", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175}};
         auto t {b_tree<int>(nums)};
 
-        t.Delete(175);
+        int refcount = t.Root().LeftChildPtr().use_count();
+        t.Delete(130);
+        refcount = t.Root().LeftChildPtr().use_count();
 
-        REQUIRE(!t.Root().HasRightChild());        
+        REQUIRE(!t.RootPtr()->HasLeftChild());        
     }
-    --------------------------------------*/
-
-
 
     //=========================================================================
 

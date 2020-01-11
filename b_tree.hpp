@@ -57,6 +57,11 @@ namespace AVL
                 return *root_;
             }
 
+            std::shared_ptr<b_node<T, invariant>> & RootPtr()
+            {
+                return root_;
+            }
+
             //------------------------------------
 
             operator bool() const
@@ -136,7 +141,7 @@ namespace AVL
             {
                 auto it = b_node<T, invariant>();
                 
-                //auto it = Root();
+                //auto it = RootPtr();
 
                 if(root_->Data() == obj)
                 {
@@ -151,13 +156,15 @@ namespace AVL
                 {
                     if(Find(obj, it))
                     {
-                        auto parent = it.Parent();
+                        auto parent = it.ParentPtr();
                  
                         // is it parent's left child? 
 
-                        if(it.Data() < parent.Data())
+                        if(it.Data() < parent->Data())
                         {
-                            parent.DeleteLeftChild();
+                            int refcount = parent->LeftChildPtr().use_count();
+                            parent->DeleteLeftChild();
+                            refcount = parent->LeftChildPtr().use_count();
                         }
 
                         // must be parent's right child,
@@ -165,7 +172,9 @@ namespace AVL
 
                         else
                         {
-                            parent.DeleteRightChild();
+                            int refcount = parent->RightChildPtr().use_count();
+                            parent->DeleteRightChild();
+                            refcount = parent->RightChildPtr().use_count();
                         }
                     }
                 }
