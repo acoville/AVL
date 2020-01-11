@@ -171,13 +171,11 @@ namespace AVL::test
     TEST_CASE("Left Child Deletion Test, case 1: leaf", "[B node]")
     {
         auto root = b_node<int, std::less<int>>(10, comp);
-        
         REQUIRE(!root.HasLeftChild());
 
         root.SetLeftChild(7);
 
         REQUIRE(root.HasLeftChild());
-
         root.DeleteLeftChild();
 
         REQUIRE(!root.HasLeftChild());

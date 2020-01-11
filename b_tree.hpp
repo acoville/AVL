@@ -134,7 +134,9 @@ namespace AVL
 
             virtual void Delete(const T &obj)
             {
-                auto it {root_};
+                auto it = b_node<T, invariant>();
+                
+                //auto it = Root();
 
                 if(root_->Data() == obj)
                 {
@@ -147,13 +149,13 @@ namespace AVL
 
                 else
                 {
-                    if(Find(obj, *it))
+                    if(Find(obj, it))
                     {
-                        auto parent = it->Parent();
+                        auto parent = it.Parent();
                  
                         // is it parent's left child? 
 
-                        if(it->Data() < parent.Data())
+                        if(it.Data() < parent.Data())
                         {
                             parent.DeleteLeftChild();
                         }

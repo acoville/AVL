@@ -456,7 +456,7 @@ namespace AVL
             if(rightChild_->IsLeaf())
             {
                 rightChild_.reset();
-                rightChild_ = nullptr;
+                //rightChild_ = nullptr;
                 return;
             }
 

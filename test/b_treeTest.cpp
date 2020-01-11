@@ -159,6 +159,19 @@ namespace AVL::test
 
     //==========================================================================
 
+    TEST_CASE("Find successfully mutates the out variable", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175}};
+        auto t {b_tree<int>(nums)};
+
+        auto node = b_node<int, std::less<int>>();
+        bool found = t.Find(130, node);
+
+        REQUIRE(node.Data() == 130);        
+    }
+
+    //=========================================================================
+
     /*--------------------------------------
 
           BEFORE                AFTER      
@@ -169,6 +182,32 @@ namespace AVL::test
 
     --------------------------------------*/
 
+    TEST_CASE("Root has not been mutated after delete", "[B tree]")
+    {
+        auto nums {std::vector<int>{155, 130, 175}};
+        auto t {b_tree<int>(nums)};
+
+        auto root1 = t.Root();
+
+        t.Delete(175);
+
+        auto root2 = t.Root();
+
+        REQUIRE(root1 == root2);
+    }
+
+
+    //==========================================================================
+
+    /*--------------------------------------
+
+          BEFORE                AFTER      
+
+            155                  155
+           /   \                /
+         130   [175]          130
+
+
     TEST_CASE("Parent has no right child after deleting right child", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175}};
@@ -178,6 +217,9 @@ namespace AVL::test
 
         REQUIRE(!t.Root().HasRightChild());        
     }
+    --------------------------------------*/
+
+
 
     //=========================================================================
 
@@ -189,7 +231,6 @@ namespace AVL::test
            /   \                /
          130   [175]          130
 
-    --------------------------------------*/
 
     TEST_CASE("Find is false after deleting right child", "[B tree]")
     {
@@ -200,6 +241,7 @@ namespace AVL::test
 
         REQUIRE(!t.Contains(175));
     }   
+    --------------------------------------*/
 
     //==========================================================================
 
