@@ -44,16 +44,6 @@ namespace AVL::test
 
     //============================================================
 
-    TEST_CASE("Lambda invariant construction Test", "[B tree]")
-    {
-        auto t = b_tree<int, [](const int &lhs, const int &rhs)
-        {
-            return lhs < rhs;
-        }>();
-    }
-
-    //============================================================
-
     /*---------------------------
 
                 25

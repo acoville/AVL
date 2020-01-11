@@ -11,13 +11,13 @@ b_tree is a template class accepting 1 or 2 template parameters
 
 * invariant (optional) - the rule governing < and > within this  tree. By default, this will be std::less<T>, which would require that T have < and > operators implemented. I did not want to commit one of my classes to implementing < and > just for this function, so any object with the () operator accepting lhs and rhs operands and returning bool may be substituted. 
 
-    // default invariant declaration (std::less<T>)
+        // default invariant declaration (std::less<T>)
 
-    auto t = b_tree<int>();
+        auto t = b_tree<int>();
 
-    // custom invariant declaration
+        // custom invariant declaration
 
-    auto t = b_tree<int, std::greater<int>>();
+        auto t = b_tree<int, std::greater<int>>();
 
 The tree does not "own" or store the raw underlying objects, it makes pointers referring to them. This allows existing structures to add binary search functionality without refactoring them. But it is therefore imperative that the binary tree be declared in the same or lower scope than the owning data structure. 
 
