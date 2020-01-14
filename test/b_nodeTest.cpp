@@ -4,17 +4,19 @@
 namespace AVL::test
 {
     auto comp {std::less<int>()};
+    int five {5};
+    int seven {7};
 
     TEST_CASE("B_Node Construction Test", "[B node]")
     {
-        auto node {b_node<int, std::less<int>>(25, comp)};
+        auto node {b_node<int, std::less<int>>(five, comp)};
     }
 
     //===========================================================
 
     TEST_CASE(" < operator (object of type T)", "[B node]")
     {
-        auto node {b_node<int, std::less<int>>(25, comp)};
+        auto node {b_node<int, std::less<int>>(five, comp)};
 
         REQUIRE(node < 40);
     }
@@ -23,8 +25,8 @@ namespace AVL::test
 
     TEST_CASE(" < operator (node)", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
-        auto node2 {b_node<int, std::less<int>>(15, comp)};
+        auto node1 {b_node<int, std::less<int>>(seven, comp)};
+        auto node2 {b_node<int, std::less<int>>(five, comp)};
 
         REQUIRE(node1 > node2);
     }
@@ -33,17 +35,17 @@ namespace AVL::test
 
     TEST_CASE(" > operator (object of type T)", "[B node]")
     {
-        auto node {b_node<int, std::less<int>>(25, comp)};
+        auto node {b_node<int, std::less<int>>(seven, comp)};
 
-        REQUIRE(node > 15);
+        REQUIRE(node > 5);
     }
 
     //----------------------------------
 
     TEST_CASE(" > operator (node)", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
-        auto node2 {b_node<int, std::less<int>>(15, comp)};
+        auto node1 {b_node<int, std::less<int>>(seven, comp)};
+        auto node2 {b_node<int, std::less<int>>(five, comp)};
 
         REQUIRE(node1 > node2);
     }
@@ -52,18 +54,8 @@ namespace AVL::test
 
     TEST_CASE("Equality Operator TRUE Test (raw pointer) ", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
+        auto node1 {b_node<int, std::less<int>>(five, comp)};
         auto nodePtr {&node1};
-
-        REQUIRE(node1 == *nodePtr);
-    }
-
-    //==============================================================
-
-    TEST_CASE("Equality Operator TRUE Test (smart pointer)", "[B node]")
-    {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
-        auto nodePtr {std::make_shared<b_node<int, std::less<int>>>(node1)};
 
         REQUIRE(node1 == *nodePtr);
     }
@@ -72,7 +64,7 @@ namespace AVL::test
 
     TEST_CASE("Copy Assignment Operator equality test", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
+        auto node1 {b_node<int, std::less<int>>(five, comp)};
         auto node2 = node1;
 
         REQUIRE(node1 == node2);
@@ -82,7 +74,7 @@ namespace AVL::test
 
     TEST_CASE("Copy Constructor equality test", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
+        auto node1 {b_node<int, std::less<int>>(five, comp)};
         auto node2(node1);
 
         REQUIRE(node2 == node1);
@@ -92,8 +84,8 @@ namespace AVL::test
 
     TEST_CASE("Equality Operator FALSE test", "[B node]")
     {
-        auto node1 {b_node<int, std::less<int>>(25, comp)};
-        auto node2 {b_node<int, std::less<int>>(15, comp)};
+        auto node1 {b_node<int, std::less<int>>(five, comp)};
+        auto node2 {b_node<int, std::less<int>>(seven, comp)};
 
         bool equal {node1 == node2};
 
@@ -104,9 +96,9 @@ namespace AVL::test
 
     TEST_CASE("Has Left Child TRUE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
+        auto root {b_node<int, std::less<int>>(five, comp)};
 
-        root.SetLeftChild(15);
+        root.SetLeftChild(seven);
 
         REQUIRE(root.HasLeftChild());
     }
@@ -115,7 +107,7 @@ namespace AVL::test
 
     TEST_CASE("Has Left Child FALSE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
+        auto root {b_node<int, std::less<int>>(five, comp)};
         REQUIRE(!root.HasLeftChild());
     }
 
@@ -123,18 +115,18 @@ namespace AVL::test
 
     TEST_CASE("Has Parent TRUE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
-        root.SetLeftChild(15);
+        auto root {b_node<int, std::less<int>>(seven, comp)};
+        root.SetLeftChild(five);
         auto left = root.LeftChild();
 
-        REQUIRE(left.HasParent());
+        REQUIRE(left->HasParent());
     }
 
     //===================================================================
 
     TEST_CASE("Has Parent FALSE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
+        auto root {b_node<int, std::less<int>>(five, comp)};
         REQUIRE(!root.HasParent());
     }
 
@@ -142,8 +134,8 @@ namespace AVL::test
 
     TEST_CASE("Has Right Child TRUE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
-        root.SetRightChild(29);
+        auto root {b_node<int, std::less<int>>(five, comp)};
+        root.SetRightChild(seven);
 
         REQUIRE(root.HasRightChild());
     }
@@ -152,7 +144,7 @@ namespace AVL::test
 
     TEST_CASE("Has Right Child FALSE test", "[B node]")
     {
-        auto root {b_node<int, std::less<int>>(25, comp)};
+        auto root {b_node<int, std::less<int>>(five, comp)};
         REQUIRE(!root.HasRightChild());
     }
 
@@ -170,10 +162,10 @@ namespace AVL::test
 
     TEST_CASE("Left Child Deletion Test, case 1: leaf", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(10, comp);
+        auto root = b_node<int, std::less<int>>(seven, comp);
         REQUIRE(!root.HasLeftChild());
 
-        root.SetLeftChild(7);
+        root.SetLeftChild(five);
 
         REQUIRE(root.HasLeftChild());
         root.DeleteLeftChild();
@@ -195,10 +187,10 @@ namespace AVL::test
 
     TEST_CASE("Right Child Deletion Test, case 1: leaf", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(10, comp);
+        auto root = b_node<int, std::less<int>>(five, comp);
         
         REQUIRE(!root.HasRightChild());
-        root.SetRightChild(15);
+        root.SetRightChild(seven);
         REQUIRE(root.HasRightChild());
 
         root.DeleteRightChild();
@@ -221,16 +213,18 @@ namespace AVL::test
 
     TEST_CASE("Delete Left Child case 2: 1 grandchild", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(50, comp);
-        root.SetLeftChild(40);
-        root.LeftChild().SetLeftChild(30);
+        auto nums = std::vector<int>{50, 40, 30};
 
-        REQUIRE(root.LeftChild().HasLeftChild());
+        auto root = b_node<int, std::less<int>>(nums[0], comp);
+        root.SetLeftChild(nums[1]);
+        root.LeftChild()->SetLeftChild(nums[2]);
+
+        REQUIRE(root.LeftChild()->HasLeftChild());
 
         root.DeleteLeftChild();
 
         REQUIRE(root.HasLeftChild());
-        REQUIRE(root.LeftChild().Data() == 30);
+        REQUIRE(root.LeftChild()->Data() == nums[2]);
     }
 
     //=====================================================================
@@ -249,16 +243,18 @@ namespace AVL::test
 
     TEST_CASE("Delete Right Child case 2: 1 grandchild", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(50, comp);
-        root.SetRightChild(70);
-        root.RightChild().SetRightChild(80);
+        auto nums = std::vector<int>{50, 70, 80};
 
-        REQUIRE(root.RightChild().HasRightChild());
+        auto root = b_node<int, std::less<int>>(nums[0], comp);
+        root.SetRightChild(nums[1]);
+        root.RightChild()->SetRightChild(nums[2]);
+
+        REQUIRE(root.RightChild()->HasRightChild());
 
         root.DeleteRightChild();
 
         REQUIRE(root.HasRightChild());
-        REQUIRE(root.RightChild().Data() == 80);
+        REQUIRE(root.RightChild()->Data() == nums[2]);
     }
 
     //==========================================================================
@@ -277,20 +273,22 @@ namespace AVL::test
 
     TEST_CASE("Delete Left Child case 3: 2 granchildren nodes", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(40, comp);
-        root.SetLeftChild(35);
-        root.LeftChild().SetLeftChild(30);
-        root.LeftChild().SetRightChild(37);
+        auto nums = std::vector<int>{40, 35, 30, 37};
+
+        auto root = b_node<int, std::less<int>>(nums[0], comp);
+        root.SetLeftChild(nums[1]);
+        root.LeftChild()->SetLeftChild(nums[2]);
+        root.LeftChild()->SetRightChild(nums[3]);
 
         //---------------------------------------
 
         root.DeleteLeftChild();
 
         REQUIRE(root.HasLeftChild());
-        REQUIRE(root.LeftChild().Data() == 37);
+        REQUIRE(root.LeftChild()->Data() == nums[3]);
         
-        REQUIRE(root.LeftChild().HasLeftChild());
-        REQUIRE(root.LeftChild().LeftChild().Data() == 30);
+        REQUIRE(root.LeftChild()->HasLeftChild());
+        REQUIRE(root.LeftChild()->LeftChild()->Data() == nums[2]);
     }
 
     //============================================================================
@@ -309,16 +307,18 @@ namespace AVL::test
 
     TEST_CASE("Delete Right Child case 3: 2 grandchildren nodes", "[B node]")
     {
-        auto root = b_node<int, std::less<int>>(40, comp);
-        root.SetRightChild(50);
-        root.RightChild().SetLeftChild(45);
-        root.RightChild().SetRightChild(55);
+        auto nums = std::vector<int>{40, 50, 45, 55};
+
+        auto root = b_node<int, std::less<int>>(nums[0], comp);
+        root.SetRightChild(nums[1]);
+        root.RightChild()->SetLeftChild(nums[2]);
+        root.RightChild()->SetRightChild(nums[3]);
 
         //---------------------------------------------------
 
         root.DeleteRightChild();
 
-        REQUIRE(root.RightChild().HasRightChild());
-        REQUIRE(root.RightChild().RightChild().Data() == 55);
+        REQUIRE(root.RightChild()->HasRightChild());
+        REQUIRE(root.RightChild()->RightChild()->Data() == nums[3]);
     }    
 }

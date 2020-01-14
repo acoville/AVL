@@ -17,7 +17,7 @@ namespace AVL
     {
         protected: 
 
-            std::shared_ptr<b_node<T, invariant>> root_ {nullptr};
+            b_node<T, invariant> *root_ {nullptr};
 
             int height_ {0};
             int size_ {0};
@@ -46,7 +46,9 @@ namespace AVL
             //==========================================
 
             virtual ~b_tree()
-            {}
+            {
+                delete root_;
+            }
 
             //==========================================
 
@@ -56,6 +58,8 @@ namespace AVL
             {
                 return *root_;
             }
+
+            //------------------------------------
 
             std::shared_ptr<b_node<T, invariant>> & RootPtr()
             {
@@ -89,7 +93,7 @@ namespace AVL
             {
                 if(!root_)
                 {
-                    root_ = std::make_shared<b_node<T, invariant>>(obj, comp_);
+                    root_ = new b_node<T, invariant>(obj, comp_);
                     return;
                 }
 
@@ -104,12 +108,12 @@ namespace AVL
                 {
                     if(It->HasLeftChild())
                     {
-                        It = It->LeftChildPtr();
+                        It = It.LeftChild();
                         goto INSERT;
                     }
                     else
                     {
-                        It->SetLeftChild(obj);
+                        It.SetLeftChild(obj);
                     }
                 }
 
@@ -119,12 +123,12 @@ namespace AVL
                 {
                     if(It->HasRightChild())
                     {
-                        It = It->RightChildPtr();
+                        It = It.RightChild();
                         goto INSERT;
                     }
                     else
                     {
-                        It->SetRightChild(obj);
+                        It.SetRightChild(obj);
                     }
                 }
             }
@@ -145,7 +149,8 @@ namespace AVL
 
                 if(root_->Data() == obj)
                 {
-                    root_.reset();
+                    delete root_;
+                    root_ = nullptr;
                 }
 
                 // otherwise, we are deleting a child node
@@ -156,13 +161,13 @@ namespace AVL
                 {
                     if(Find(obj, it))
                     {
-                        auto parent = it.ParentPtr();
+                        auto parent = it.Parent();
                  
                         // is it parent's left child? 
 
-                        if(it.Data() < parent->Data())
+                        if(it.Data() < parent.Data())
                         {
-                            parent->DeleteLeftChild();
+                            parent.DeleteLeftChild();
                         }
 
                         // must be parent's right child,
@@ -170,7 +175,7 @@ namespace AVL
 
                         else
                         {
-                            parent->DeleteRightChild();
+                            parent.DeleteRightChild();
                         }
                     }
                 }
@@ -223,7 +228,7 @@ namespace AVL
                 {
                     if(it->HasLeftChild())
                     {
-                        it = it->LeftChildPtr();
+                        it = it->LeftChild();
                         goto BEGIN;
                     }
                     else
@@ -238,7 +243,7 @@ namespace AVL
                 {
                     if(it->HasRightChild())
                     {
-                        it = it->RightChildPtr();
+                        it = it->RightChild();
                         goto BEGIN;
                     }
                     else

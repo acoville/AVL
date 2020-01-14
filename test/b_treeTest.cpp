@@ -61,7 +61,7 @@ namespace AVL::test
             t.Insert(n);
 
         REQUIRE(t.Root().HasLeftChild());
-        REQUIRE(t.Root().LeftChild().Data() == 12);
+        REQUIRE(t.Root().LeftChild()->Data() == 12);
     }
 
     //============================================================
@@ -89,10 +89,10 @@ namespace AVL::test
 
         auto root = t.Root();
 
-        REQUIRE(root.LeftChild().LeftChild().HasLeftChild());
-        auto leftMostLeaf = root.LeftChild().LeftChild().LeftChild();
+        REQUIRE(root.LeftChild()->LeftChild()->HasLeftChild());
+        auto leftMostLeaf = root.LeftChild()->LeftChild()->LeftChild();
 
-        REQUIRE(leftMostLeaf.Data() == 120);
+        REQUIRE(leftMostLeaf->Data() == 120);
     }
 
     //========================================================================
@@ -196,31 +196,6 @@ namespace AVL::test
         REQUIRE(root1 == root2);
     }
 
-
-    //==========================================================================
-
-    /*--------------------------------------
-
-          BEFORE                AFTER      
-
-            155                  155
-           /   \                /
-         130   [175]          130
-
-    --------------------------------------*/
-
-    TEST_CASE("Parent has no right child after deleting right child", "[B tree]")
-    {
-        auto nums {std::vector<int>{155, 130, 175}};
-        auto t {b_tree<int>(nums)};
-
-        int refcount = t.Root().LeftChildPtr().use_count(); // 3
-        t.Delete(130);
-        refcount = t.Root().LeftChildPtr().use_count(); // still 2
-
-        REQUIRE(!t.RootPtr()->HasLeftChild());        
-    }
-
     //=========================================================================
 
      /*--------------------------------------
@@ -231,6 +206,7 @@ namespace AVL::test
            /   \                /
          130   [175]          130
 
+    --------------------------------------*/
 
     TEST_CASE("Find is false after deleting right child", "[B tree]")
     {
@@ -241,7 +217,6 @@ namespace AVL::test
 
         REQUIRE(!t.Contains(175));
     }   
-    --------------------------------------*/
 
     //==========================================================================
 
@@ -253,6 +228,7 @@ namespace AVL::test
            /   \                    \
         [130]   175                 175
 
+    -----------------------------------*/
 
     TEST_CASE("Test of FIND false after a delete in left subtree", "[B tree]")
     {
@@ -272,7 +248,6 @@ namespace AVL::test
         found = t.Find(130, out);
         REQUIRE(!found);
     }
-    -----------------------------------*/
 
     //==============================================================
 
@@ -288,7 +263,6 @@ namespace AVL::test
 
     ----------------------------------*/
 
-/*
     TEST_CASE("Delete Left Child case 2: 1 granchild", "[B tree]")
     {
         auto nums = std::vector<int>{50, 40, 30};
@@ -312,15 +286,11 @@ namespace AVL::test
 
         auto root = t.Root();
 
-        //REQUIRE(t.Root().HasLeftChild());
-
-
         // 30 is 50's left child
 
         auto leftChild = t.Root().LeftChild();
-        REQUIRE(leftChild.Data() == 30);
+        REQUIRE(leftChild->Data() == 30);
     }    
-*/
 
     //===============================================================
 

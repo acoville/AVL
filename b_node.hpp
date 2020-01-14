@@ -19,11 +19,11 @@ namespace AVL
         protected: 
 
         invariant comp_;
-        std::shared_ptr<T> data_ {nullptr};
 
-        std::shared_ptr<b_node> leftChild_ {nullptr};
-        std::shared_ptr<b_node> rightChild_ {nullptr};
-        std::shared_ptr<b_node> parent_ {nullptr};
+        T * data_ {nullptr};
+        b_node * leftChild_ {nullptr};
+        b_node * rightChild_ {nullptr};
+        b_node * parent_ {nullptr};
 
         int height_ {0};
         bool leaf_ {true};
@@ -35,10 +35,12 @@ namespace AVL
         // constructors
 
         b_node() = default;
-        
-        b_node(const T &obj, const invariant comp) : 
+
+        //------------------------------------------------
+
+        b_node(T &obj, invariant comp) : 
             comp_ {comp},
-            data_ {std::make_shared<T>(obj)}
+            data_ {&obj}
         {}
 
         //------------------------------------------------
@@ -58,38 +60,41 @@ namespace AVL
 
         b_node& operator = (const b_node &other)
         {
-            data_ =  other.data_;
-            leftChild_ = other.leftChild_;
-            rightChild_ = other.rightChild_;
-            parent_ = other.parent_;
-            comp_ = other.comp_;
-            height_ = other.height_;
+            if(this != other)
+            {
+                data_ =  other.data_;
+                leftChild_ = other.leftChild_;
+                rightChild_ = other.rightChild_;
+                parent_ = other.parent_;
+                comp_ = other.comp_;
+                height_ = other.height_;
+            }
 
             return *this;
         }
 
         //------------------------------------------------
+        
+        b_node& operator = (const b_node *other)
+        {
+            if(this != other)
+            {
+                data_ =  other->data_;
+                leftChild_ = other->leftChild_;
+                rightChild_ = other->rightChild_;
+                parent_ = other->parent_;
+                comp_ = other->comp_;
+                height_ = other->height_;
+            }
+
+            return *this;
+        }
+        //------------------------------------------------
 
         virtual ~b_node()
         {
-        }
-
-        //===================================================
-
-        /*-----------------------------
-
-            Reset function releases
-            calling object's claim to the 
-            shared pointer
-
-        -----------------------------*/
-
-        void Reset()
-        {
-            data_.reset();
-            parent_.reset();
-            leftChild_.reset();
-            rightChild_.reset();
+            delete leftChild_;
+            delete rightChild_;
         }
 
         //===================================================
@@ -188,14 +193,7 @@ namespace AVL
 
         //--------------------------------------
 
-        b_node & LeftChild()
-        {
-            return *leftChild_;
-        }
-
-        //------------------------
-
-        std::shared_ptr<b_node> & LeftChildPtr()
+        b_node * LeftChild()
         {
             return leftChild_;
         }
@@ -204,11 +202,11 @@ namespace AVL
 
         // create a new node pointing to obj
 
-        virtual void SetLeftChild(const T &obj)
+        virtual void SetLeftChild(T &obj)
         {
-            leftChild_ = std::make_shared<b_node>(obj, comp_);
+            leftChild_ = new b_node(obj, comp_);
             leftChild_->SetHeight(height_ + 1);
-            leftChild_->parent_ = std::make_shared<b_node>(*this);
+            leftChild_->parent_ = this;
 
             if(leaf_)
                 leaf_ = false;
@@ -218,11 +216,11 @@ namespace AVL
 
         // overload directly reassigning the left child pointer
 
-        virtual void SetLeftChild(std::shared_ptr<b_node> &other)
+        virtual void SetLeftChild(b_node *other)
         {
             leftChild_ = other;
             leftChild_->SetHeight(height_ + 1);
-            leftChild_->parent_ = std::make_shared<b_node>(*this);
+            leftChild_->parent_ = this;
 
             if(leaf_)
                 leaf_ = false;            
@@ -250,23 +248,18 @@ namespace AVL
 
         //-----------------------------------------------
 
-        b_node & RightChild()
-        {
-            return *rightChild_;
-        }
-
-        std::shared_ptr<b_node> & RightChildPtr()
+        b_node * RightChild()
         {
             return rightChild_;
         }
 
         //-----------------------------------------------
 
-        virtual void SetRightChild(const T &obj)
+        virtual void SetRightChild(T &obj)
         {
-            rightChild_ = std::make_shared<b_node>(obj, comp_);
+            rightChild_ = new b_node(obj, comp_);
             rightChild_->SetHeight(height_ + 1);
-            rightChild_->parent_ = std::make_shared<b_node>(*this);
+            rightChild_->parent_ = this;
 
             if(leaf_)
                 leaf_ = false;
@@ -274,11 +267,11 @@ namespace AVL
 
         //-------------------------------------------------
 
-        void SetRightChild(std::shared_ptr<b_node> &other)
+        void SetRightChild(b_node *other)
         {
             rightChild_ = other;
             rightChild_->SetHeight(height_ + 1);
-            rightChild_->parent_ = std::make_shared<b_node>(*this);
+            rightChild_->parent_ = this;
 
             if(leaf_)
                 leaf_ = false;
@@ -302,13 +295,6 @@ namespace AVL
         b_node & Parent()
         {
             return *parent_; 
-        }
-
-        //-------------------------------------
-
-        std::shared_ptr<b_node<T, invariant>> & ParentPtr()
-        {
-            return parent_;
         }
 
         //============================================================
@@ -353,7 +339,7 @@ namespace AVL
 
             if(leftChild_->IsLeaf())
             {
-                leftChild_.reset();
+                delete leftChild_;
                 leftChild_ = nullptr;
                 return;
             }
@@ -386,6 +372,7 @@ namespace AVL
                 {
                     if(leftChild_->HasLeftChild())
                     {
+
                         SetLeftChild(leftChild_->leftChild_);
                     }
                     else
@@ -412,8 +399,8 @@ namespace AVL
 
                 case(2):
                 {
-                    auto LeftLeft = leftChild_->LeftChildPtr();
-                    auto LeftRight = leftChild_->RightChildPtr();
+                    auto LeftLeft = leftChild_->LeftChild();
+                    auto LeftRight = leftChild_->RightChild();
 
                     if(*LeftLeft > *LeftRight)
                     {
@@ -455,7 +442,8 @@ namespace AVL
 
             if(rightChild_->IsLeaf())
             {
-                rightChild_.reset();
+                delete rightChild_;
+                rightChild_ = nullptr;
                 return;
             }
 
@@ -516,8 +504,8 @@ namespace AVL
 
                 case(2):
                 {
-                    auto RightLeft = rightChild_->LeftChildPtr();
-                    auto RightRight = rightChild_->RightChildPtr();
+                    auto RightLeft = rightChild_->LeftChild();
+                    auto RightRight = rightChild_->RightChild();
 
                     if(*RightLeft < *RightRight)
                     {
