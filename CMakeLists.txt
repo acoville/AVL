@@ -3,7 +3,7 @@ project (AVL LANGUAGES CXX VERSION 2.0)
 
 add_compile_options(-Wall -Wextra -g -std=c++1z)
 
-# policy 79 allows the target to scope source files outside
+# CMake Policy 79 allows targets to scope source files outside
 # this directory
 
 cmake_policy (SET CMP0079 NEW)
@@ -12,8 +12,8 @@ find_package(Catch2 REQUIRED)
 
 add_executable(avl_test
                 test/testrunner.cpp
-                test/b_nodeTest.cpp
-                test/b_treeTest.cpp)
+                test/b_nodeTest.cpp)
+                #test/b_treeTest.cpp)
                 #test/avl_treeTest.cpp)
 
 target_link_libraries(avl_test Catch2::Catch2)

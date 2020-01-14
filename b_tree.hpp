@@ -22,6 +22,21 @@ namespace AVL
             int size_ {0};
             invariant comp_;
 
+            //=====================================================
+/*
+            void Destroy(b_node<T, invariant> * leaf)
+            {
+
+
+                if(leaf)
+                {
+                    Destroy(leaf->LeftChild());
+                    Destroy(leaf->RightChild());
+                    delete leaf;
+                }
+            }
+*/
+
         public: 
 
             b_tree() = default;
@@ -46,21 +61,14 @@ namespace AVL
 
             virtual ~b_tree()
             {
-                delete root_;
+                //Destroy(root_);
             }
 
             //==========================================
 
             // getters
 
-            b_node<T, invariant> & Root()
-            {
-                return *root_;
-            }
-
-            //------------------------------------
-
-            std::shared_ptr<b_node<T, invariant>> & RootPtr()
+            b_node<T, invariant> * Root()
             {
                 return root_;
             }
@@ -142,9 +150,10 @@ namespace AVL
 
             virtual void Delete(const T &obj)
             {
-                auto it = b_node<T, invariant>();
-                
-                //auto it = RootPtr();
+                auto *it = root_;
+
+                // if this is the root node, delete the 
+                // whole tree
 
                 if(root_->Data() == obj)
                 {
@@ -160,13 +169,15 @@ namespace AVL
                 {
                     if(Find(obj, it))
                     {
-                        auto parent = it.Parent();
+                        //auto parent = it.Parent();
                  
+                        it = &it->Parent();
+
                         // is it parent's left child? 
 
-                        if(it.Data() < parent.Data())
+                        if(obj < it->Data())
                         {
-                            parent.DeleteLeftChild();
+                            it->DeleteLeftChild();
                         }
 
                         // must be parent's right child,
@@ -174,7 +185,7 @@ namespace AVL
 
                         else
                         {
-                            parent.DeleteRightChild();
+                            it->DeleteRightChild();
                         }
                     }
                 }
@@ -184,7 +195,7 @@ namespace AVL
 
             bool Contains(const T &obj)
             {
-                auto out = b_node<T, invariant>();
+                auto out = root_;
                 return(Find(obj, out));
             }
 
@@ -200,7 +211,7 @@ namespace AVL
 
             ---------------------------------------*/
 
-            bool Find(const T &obj, b_node<T, invariant> &out)
+            bool Find(const T &obj, b_node<T, invariant> *out)
             {
                 // exit if root_ is null
 

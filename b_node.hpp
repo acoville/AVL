@@ -93,7 +93,7 @@ namespace AVL
 
         virtual ~b_node()
         {
-            
+            /*
             if(HasLeftChild())
             {
                 DeleteLeftChild();
@@ -103,6 +103,7 @@ namespace AVL
             {
                 DeleteRightChild();
             }
+            */
         }
 
         //===================================================
@@ -336,6 +337,8 @@ namespace AVL
         void DeleteLeftChild()
         {
             /*-----------------------------------------
+
+                case 1: child node is a leaf node
 
                     BEFORE:            AFTER:
 
