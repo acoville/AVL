@@ -12,8 +12,8 @@ find_package(Catch2 REQUIRED)
 
 add_executable(avl_test
                 test/testrunner.cpp
-                test/b_nodeTest.cpp)
-                #test/b_treeTest.cpp)
+                test/b_nodeTest.cpp
+                test/b_treeTest.cpp)
                 #test/avl_treeTest.cpp)
 
 target_link_libraries(avl_test Catch2::Catch2)
