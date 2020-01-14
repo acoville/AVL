@@ -93,7 +93,7 @@ namespace AVL
 
             virtual void Insert(T &obj)
             {
-                if(!root_)
+                if(root_ == nullptr)
                 {
                     root_ = new b_node<T, invariant>(obj, comp_);
                     return;
@@ -156,7 +156,7 @@ namespace AVL
 
             ----------------------------*/
 
-            bool Find(T obj, b_node<T, invariant> *out)
+            bool Find(T obj, b_node<T, invariant> *out = nullptr)
             {
                 // exit if root_ is null
 
@@ -173,7 +173,11 @@ namespace AVL
 
                 if(it->Data() == obj)
                 {
-                    out = it;
+                    if(out != nullptr)
+                    {
+                        out = it;
+                    }
+
                     return true;
                 }
 
@@ -214,23 +218,6 @@ namespace AVL
                 END:
 
                 return false;
-            }
-
-            //========================================================
-
-            /*----------------------------------
-
-                Contains performs a search
-                but does not modify an output
-                variable
-
-            -----------------------------------*/
-
-            bool Contains(T key)
-            {
-                auto out = b_node<T, invariant>();
-
-                return(Find(key, &out));
             }
     };
 }

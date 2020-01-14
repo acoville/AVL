@@ -46,16 +46,23 @@ Adding elements to a tree can be done using the .Insert() function, or its alias
 
 * Find: 
 
-Return type of bool indicating weather or not the value was found within the tree. The first parameter is the value to search for, the 2nd parameter is an optional out variable which Find will reassign to the located node.
+Return type of bool indicating weather or not the value was found within the tree. The first parameter is the value to search for, the 2nd parameter is an optional out variable which Find will reassign to the located node. 
 
-    auto node = b_node<int>();
-    
-    if(t.Find(155, node))
+    if(t.Find(155))
     {
         // do something
     }
 
-A simpler Contains() function with no out variable can simply search for a value and return T or F.
+    // ------------ OR
+
+    auto result = b_node<int>();
+    
+    if(t.Find(155, result))
+    {
+        // do something with the result
+    }
+
 
 * Delete: 
 
+Searches the tree for the supplied key value. If a match is found, the node pointing to that value is deleted. (This does not affect the owning data structure, only the tree). 

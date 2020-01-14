@@ -67,7 +67,7 @@ namespace AVL::test
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
         auto t {b_tree<int>(nums)};
 
-        REQUIRE(t.Contains(128));    
+        REQUIRE(t.Find(128));    
     }
 
     //=========================================================================
