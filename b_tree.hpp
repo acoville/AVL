@@ -31,18 +31,59 @@ namespace AVL
     {
         protected:
 
-            std::unique_ptr<b_node<T, invariant>> root_ {nullptr};
+            b_node<T, invariant> *root_ {nullptr};
+
+            int height_ {0};
+            int size_ {0};
             invariant comp_;
 
 
         public:
 
             b_tree() = default;
+
+            //-------------------------------------
+
+            b_tree(std::vector<T> data)
+            {
+                for(auto d : data)
+                {
+                    Insert(d);
+                }
+            }
             
+            //------------------------------------
+
             virtual ~b_tree()
             {}
 
-            //====================================================
+            b_node<T, invariant> & Root()
+            {
+                return *root_;
+            }
+
+            //------------------------------------
+
+            std::shared_ptr<b_node<T, invariant>> & RootPtr()
+            {
+                return root_;
+            }
+
+            //------------------------------------
+
+            operator bool() const
+            {
+                return(root_ == nullptr) ? false : true;
+            }
+
+            //------------------------------------
+            
+            void operator += (T &obj)
+            {
+                Insert(obj);
+            }
+
+            //============================================================
 
             /*---------------------------
 
@@ -50,9 +91,48 @@ namespace AVL
 
             ---------------------------*/
 
-            void Insert(const T &obj)
+            virtual void Insert(T &obj)
             {
+                if(!root_)
+                {
+                    root_ = new b_node<T, invariant>(obj, comp_);
+                    return;
+                }
 
+                size_++;
+                auto It {root_};
+
+                INSERT:
+
+                // left subtree
+
+                if(*It > obj)
+                {
+                    if(It->HasLeftChild())
+                    {
+                        It = It->LeftChild();
+                        goto INSERT;
+                    }
+                    else
+                    {
+                        It->SetLeftChild(obj);
+                    }
+                }
+
+                // right subtree
+
+                else
+                {
+                    if(It->HasRightChild())
+                    {
+                        It = It->RightChild();
+                        goto INSERT;
+                    }
+                    else
+                    {
+                        It->SetRightChild(obj);
+                    }
+                }
             }
 
             //===================================================
@@ -76,9 +156,81 @@ namespace AVL
 
             ----------------------------*/
 
-            b_node<T, invariant> * Find(T key)
+            bool Find(T obj, b_node<T, invariant> *out)
             {
+                // exit if root_ is null
 
+                if(!root_)
+                {
+                    return false;
+                }
+
+                // otherwise, begin binary search at root node
+
+                auto it = root_;
+
+                BEGIN:
+
+                if(it->Data() == obj)
+                {
+                    out = it;
+                    return true;
+                }
+
+                // left subtree
+
+                if(obj < it->Data())
+                {
+                    if(it->HasLeftChild())
+                    {
+                        it = it->LeftChild();
+                        goto BEGIN;
+                    }
+                    else
+                    {
+                        goto END;
+                    }
+                }
+
+                // right subtree
+
+                else
+                {
+                    if(it->HasRightChild())
+                    {
+                        it = it->RightChild();
+                        goto BEGIN;
+                    }
+                    else
+                    {
+                        goto END;
+                    }
+                    
+                }
+
+                // if we have reached a leaf node, then the 
+                // value is not in the tree.
+
+                END:
+
+                return false;
+            }
+
+            //========================================================
+
+            /*----------------------------------
+
+                Contains performs a search
+                but does not modify an output
+                variable
+
+            -----------------------------------*/
+
+            bool Contains(T key)
+            {
+                auto out = b_node<T, invariant>();
+
+                return(Find(key, &out));
             }
     };
 }

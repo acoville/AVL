@@ -60,7 +60,7 @@ namespace AVL
 
         b_node& operator = (const b_node &other)
         {
-            if(*this != other)
+            if(this != other)
             {
                 data_ =  other.data_;
                 leftChild_ = other.leftChild_;
@@ -93,17 +93,8 @@ namespace AVL
 
         virtual ~b_node()
         {
-            /*
-            if(HasLeftChild())
-            {
-                DeleteLeftChild();
-            }
-
-            if(HasRightChild())
-            {
-                DeleteRightChild();
-            }
-            */
+            delete leftChild_;
+            delete rightChild_;
         }
 
         //===================================================
