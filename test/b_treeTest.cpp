@@ -81,11 +81,9 @@ namespace AVL::test
 
     TEST_CASE("Smallish Insertion Accuracy Test", "[B Tree]")
     {
-        auto nums = std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120};
-        auto t = b_tree<int>();
 
-        for(auto &n : nums)
-            t += n;
+        auto nums = std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120};
+        auto t = b_tree<int>(nums);
 
         auto root = t.Root();
 
@@ -93,6 +91,8 @@ namespace AVL::test
         auto leftMostLeaf = root.LeftChild()->LeftChild()->LeftChild();
 
         REQUIRE(leftMostLeaf->Data() == 120);
+/*
+*/
     }
 
     //========================================================================
@@ -140,8 +140,10 @@ namespace AVL::test
 
     TEST_CASE("A tree with 1 node returns boolean true", "[B tree]")
     {
+        int five = 155;
+
         auto t {b_tree<int>()};
-        t += 155;
+        t += five;
 
         REQUIRE(t);
     }
@@ -150,8 +152,10 @@ namespace AVL::test
 
     TEST_CASE("Deleting root node makes the tree return boolean false again", "[B tree]")
     {
+        int five = 155;
+
         auto t {b_tree<int>()};
-        t += 155;
+        t += five;
         t.Delete(155);
 
         REQUIRE(!t);
@@ -184,6 +188,7 @@ namespace AVL::test
 
     TEST_CASE("Root has not been mutated after delete", "[B tree]")
     {
+
         auto nums {std::vector<int>{155, 130, 175}};
         auto t {b_tree<int>(nums)};
 
@@ -228,7 +233,6 @@ namespace AVL::test
            /   \                    \
         [130]   175                 175
 
-    -----------------------------------*/
 
     TEST_CASE("Test of FIND false after a delete in left subtree", "[B tree]")
     {
@@ -248,6 +252,7 @@ namespace AVL::test
         found = t.Find(130, out);
         REQUIRE(!found);
     }
+    -----------------------------------*/
 
     //==============================================================
 
@@ -261,9 +266,8 @@ namespace AVL::test
         /
       30
 
-    ----------------------------------*/
 
-    TEST_CASE("Delete Left Child case 2: 1 granchild", "[B tree]")
+    TEST_CASE("Delete Left Child case 2: 1 grandchild", "[B tree]")
     {
         auto nums = std::vector<int>{50, 40, 30};
 
@@ -292,6 +296,7 @@ namespace AVL::test
         REQUIRE(leftChild->Data() == 30);
     }    
 
+    ----------------------------------*/
     //===============================================================
 
     /*----------------------------------

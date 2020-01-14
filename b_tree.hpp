@@ -18,7 +18,6 @@ namespace AVL
         protected: 
 
             b_node<T, invariant> *root_ {nullptr};
-
             int height_ {0};
             int size_ {0};
             invariant comp_;
@@ -75,7 +74,7 @@ namespace AVL
 
             //------------------------------------
             
-            void operator += (const T &obj)
+            void operator += (T &obj)
             {
                 Insert(obj);
             }
@@ -89,7 +88,7 @@ namespace AVL
 
             //========================================================
 
-            virtual void Insert(const T &obj)
+            virtual void Insert(T &obj)
             {
                 if(!root_)
                 {
@@ -108,12 +107,12 @@ namespace AVL
                 {
                     if(It->HasLeftChild())
                     {
-                        It = It.LeftChild();
+                        It = It->LeftChild();
                         goto INSERT;
                     }
                     else
                     {
-                        It.SetLeftChild(obj);
+                        It->SetLeftChild(obj);
                     }
                 }
 
@@ -123,12 +122,12 @@ namespace AVL
                 {
                     if(It->HasRightChild())
                     {
-                        It = It.RightChild();
+                        It = It->RightChild();
                         goto INSERT;
                     }
                     else
                     {
-                        It.SetRightChild(obj);
+                        It->SetRightChild(obj);
                     }
                 }
             }
@@ -218,7 +217,7 @@ namespace AVL
 
                 if(it->Data() == obj)
                 {
-                    out = *it;
+                    out = it;
                     return true;
                 }
 
