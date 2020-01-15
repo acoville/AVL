@@ -44,9 +44,9 @@ namespace AVL
 
             //-------------------------------------
 
-            b_tree(std::vector<T> data)
+            b_tree(std::vector<T> &data)
             {
-                for(auto d : data)
+                for(auto &d : data)
                 {
                     Insert(d);
                 }
@@ -56,6 +56,8 @@ namespace AVL
 
             virtual ~b_tree()
             {}
+
+            //------------------------------------
 
             b_node<T, invariant> & Root()
             {
@@ -145,7 +147,7 @@ namespace AVL
 
             void Delete(T key)
             {
-
+                
             }
 
             //===================================================

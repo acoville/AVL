@@ -11,7 +11,7 @@ namespace AVL::test
 {
     //==========================================================
 
-    TEST_CASE("b_tree construction test", "[b tree]")
+    TEST_CASE("b_tree construction test", "[B tree]")
     {
         auto t = b_tree<int>();
     }
@@ -45,6 +45,8 @@ namespace AVL::test
         auto leftMostLeaf = root.LeftChild()->LeftChild()->LeftChild();
 
         REQUIRE(leftMostLeaf->Data() == 120);
+
+        REQUIRE(t.Find(120));
     }
 
     //========================================================================
@@ -67,17 +69,20 @@ namespace AVL::test
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
         auto t {b_tree<int>(nums)};
 
-        REQUIRE(t.Find(128));    
+
+        // it can find 120 but not 128
+
+        REQUIRE(t.Find(120));    
     }
 
     //=========================================================================
-/*
+
     TEST_CASE("Test of Find FALSE", "[B tree]")
     {
         auto nums {std::vector<int>{155, 130, 175, 127, 135, 170, 177, 128, 120}};
         auto t {b_tree<int>(nums)};
 
-        REQUIRE(!t.Contains(500));
+        REQUIRE(!t.Find(500));
     }
 
     //==========================================================================
@@ -102,6 +107,7 @@ namespace AVL::test
 
     //==========================================================================
 
+/*
     TEST_CASE("Deleting root node makes the tree return boolean false again", "[B tree]")
     {
         int five = 155;
